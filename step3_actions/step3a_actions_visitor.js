@@ -40,9 +40,9 @@ class DSLToAstVisitor extends BaseDSLVisitor {
 
         return {
             type: "CONNECT_STMT",
-            mongoURI: MongoURI,
-            dbUsername: dbUsername,
-            dbPassword: dbPassword
+            mongoURI: JSON.parse(MongoURI),
+            dbUsername: JSON.parse(dbUsername),
+            dbPassword: JSON.parse(dbPassword)
         }
     }
 

@@ -122,10 +122,10 @@ module.exports = {
     SelectParser: SelectParser,
 
     parse: function(inputText) {
-        const lexResult = selectLexer.lex(inputText)
+        const lexResult = selectLexer.lex(inputText);
 
         // ".input" is a setter which will reset the parser's internal's state.
-        parserInstance.input = lexResult.tokens
+        parserInstance.input = lexResult.tokens;
 
         // No semantic actions so this won't return anything yet.
         const cst = parserInstance.Program();

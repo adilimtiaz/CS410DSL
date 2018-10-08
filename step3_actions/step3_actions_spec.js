@@ -12,9 +12,9 @@ describe("Chevrotain Tutorial", () => {
             const ast = toAstVisitor(inputText);
 
             let expectedConnectStatementAst = {
-                "dbPassword": "\"password123\"",
-                "dbUsername": "\"adilimtiaz\"",
-                "mongoURI": "\"ds111963.mlab.com:11963/emaily-dev\"",
+                "dbPassword": "password123",
+                "dbUsername": "adilimtiaz",
+                "mongoURI": "ds111963.mlab.com:11963/emaily-dev",
                 "type": "CONNECT_STMT"
             };
 
