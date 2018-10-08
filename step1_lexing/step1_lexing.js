@@ -109,7 +109,7 @@ module.exports = {
 
         if (lexingResult.errors.length > 0) {
             console.log(JSON.stringify(lexingResult.errors));
-            throw Error("Sad Sad Panda, lexing errors detected")
+            throw Error(JSON.stringify(lexingResult.errors.map(error => error.message)));
         }
 
         return lexingResult

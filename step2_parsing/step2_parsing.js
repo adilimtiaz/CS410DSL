@@ -34,7 +34,7 @@ class SelectParser extends Parser {
         $.RULE("connectStatement", () =>{
             $.CONSUME($.tokensMap.ConnectLiteral);
             $.CONSUME1($.tokensMap.LRound);
-            $.CONSUME2($.tokensMap.StringLiteral);
+            $.CONSUME2($.tokensMap.MongoURI);
             $.CONSUME3($.tokensMap.Comma);
             $.CONSUME4($.tokensMap.StringLiteral);
             $.CONSUME5($.tokensMap.Comma);
