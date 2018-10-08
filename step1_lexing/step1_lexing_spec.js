@@ -8,6 +8,7 @@ const tokenVocabulary = require("./step1_lexing").tokenVocabulary;
 describe("Chevrotain Tutorial", () => {
     context("Step 1 - Lexing", () => {
         it("Can Lex a connect statement", () => {
+            //let inputText = "CreateSchema(\"SCHEMANAME\",\"attribute\":\"type\", \"att2\":\"type2\")";
             let inputText = "Connect(\"ds111963.mlab.com:11963/emaily-dev\",\"dbUserName\", \"Password\");";
             let lexingResult = lex(inputText);
 

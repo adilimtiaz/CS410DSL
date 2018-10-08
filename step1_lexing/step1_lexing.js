@@ -21,6 +21,8 @@ const MongoURI = createToken({
    pattern: /\"?(([\w\.]+)?):(\d+)\/([\w\-]+)\"?/
 });
 const ConnectLiteral = createToken({name: "ConnectLiteral", pattern: /Connect/ , longer_alt: StringLiteral});
+const CreateSchema = createToken({name: "CreateSchema", pattern: /CreateSchema/, longer_alt: StringLiteral});
+const Name1 = createToken({name: "Name1", pattern: /Name/, longer_alt: StringLiteral});
 const True = createToken({ name: "True", pattern: /true/, longer_alt: StringLiteral});
 const False = createToken({ name: "False", pattern: /false/, longer_alt: StringLiteral});
 const Null = createToken({ name: "Null", pattern: /null/, longer_alt: StringLiteral});
@@ -31,7 +33,7 @@ const RCurly = createToken({ name: "RCurly", pattern: /}/ });
 const LSquare = createToken({ name: "LSquare", pattern: /\[/ });
 const RSquare = createToken({ name: "RSquare", pattern: /]/ });
 const Comma = createToken({ name: "Comma", pattern: /,/ });
-const Colon = createToken({ name: "Colon", pattern: /:/, longer_alt: StringLiteral });
+const Colon1 = createToken({ name: "Colon1", pattern: /:/ });
 const Semicolon = createToken({ name: "Semicolon", pattern: /;/ });
 const NumberLiteral = createToken({
     name: "NumberLiteral",
@@ -49,6 +51,8 @@ const LesserThan = createToken({name: "LesserThan" ,pattern: /</ });
 
 const allTokens = [
     ConnectLiteral,
+    CreateSchema,
+    Name1,
     WhiteSpace,
     MongoURI,
     NumberLiteral,
@@ -59,7 +63,7 @@ const allTokens = [
     LSquare,
     RSquare,
     Comma,
-    Colon,
+    Colon1,
     Semicolon,
     True,
     False,
