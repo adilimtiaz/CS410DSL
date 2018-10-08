@@ -34,11 +34,23 @@ class SelectParser extends Parser {
         $.RULE("Program", () =>{
            $.SUBRULE($.startStmt);
            $.SUBRULE($.connectStatement);
+           $.SUBRULE($.setProjectBaseDirStmt);
            $.SUBRULE($.endStmt);
         });
 
         $.RULE("startStmt", () =>{
             $.CONSUME($.tokensMap.Start);
+        });
+
+        $.RULE("setProjectBaseDirStmt", () =>{
+            $.CONSUME($.tokensMap.SetProjectBaseDir);
+            $.CONSUME($.tokensMap.LRound);
+            $.OR([
+                {ALT: () => $.CONSUME($.tokensMap.UnixPath)},
+                {ALT: () => $.CONSUME($.tokensMap.WindowsPath)}
+            ], {LABEL: "path"});
+            $.CONSUME($.tokensMap.RRound);
+            $.CONSUME($.tokensMap.Semicolon);
         });
 
         $.RULE("endStmt", () =>{

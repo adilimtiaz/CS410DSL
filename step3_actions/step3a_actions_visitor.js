@@ -24,11 +24,27 @@ class DSLToAstVisitor extends BaseDSLVisitor {
 
     Program(ctx){
         // No need to visit start or end as they are only used to validate program syntax
-        let connectStatementAst = this.visit(ctx.connectStatement);
+        let connectStmtAst = this.visit(ctx.connectStatement);
+        let setProjectBaseDirStmtAst = this.visit(ctx.setProjectBaseDirStmt);
 
         return {
             type: "PROGRAM",
-            connectStatement: connectStatementAst
+            connectStmtAst: connectStmtAst,
+            setProjectBaseDirStmtAst: setProjectBaseDirStmtAst
+        }
+    }
+
+    setProjectBaseDirStmt(ctx){
+        let path;
+        if(ctx.UnixPath){
+            path = ctx.UnixPath[0].image;
+        }
+        else
+            path = ctx.WindowsPath[0].image;
+
+        return {
+            type: "SET_PROJECT_BASE_DIR_STMT",
+            path: JSON.parse(path)
         }
     }
 
