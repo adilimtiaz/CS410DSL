@@ -18,9 +18,11 @@ describe("Chevrotain Tutorial", () => {
                 "type": "CONNECT_STMT"
             };
 
+
             expect(ast).to.deep.equal({
                 type: "PROGRAM",
                 connectStatement: expectedConnectStatementAst
+
             });
         })
     })

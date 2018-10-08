@@ -63,7 +63,7 @@ class SelectParser extends Parser {
             $.CONSUME($.tokensMap.LCurly);
             $.SUBRULE($.nameClause);
             $.CONSUME($.tokensMap.Comma);
-            $.SUBRULE($.attr_Type_Clause);
+            $.SUBRULE($.entryClause);
             $.CONSUME($.tokensMap.RCurly);
             $.CONSUME($.tokensMap.Semicolon);
         });
@@ -74,7 +74,7 @@ class SelectParser extends Parser {
             $.CONSUME2($.tokensMap.StringLiteral);
         });
 
-        $.RULE("attr_Type_Clause", () => {
+        $.RULE("entryClause", () => {
             $.AT_LEAST_ONE_SEP({
                 SEP: Comma,
                 DEF: () => {
