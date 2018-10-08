@@ -18,6 +18,7 @@ describe("Chevrotain Tutorial", () => {
                 "type": "CONNECT_STMT"
             };
 
+
             let expectSetProjectBaseDirStmtAst = {
                 "path": "/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial/SampleBase",
                 "type": "SET_PROJECT_BASE_DIR_STMT"

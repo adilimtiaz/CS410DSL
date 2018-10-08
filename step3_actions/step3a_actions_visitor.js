@@ -26,11 +26,13 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         // No need to visit start or end as they are only used to validate program syntax
         let connectStmtAst = this.visit(ctx.connectStatement);
         let setProjectBaseDirStmtAst = this.visit(ctx.setProjectBaseDirStmt);
-
+        let schemaStatementAst = this.visit(ctx.schemaStatement);
+          
         return {
             type: "PROGRAM",
             connectStmtAst: connectStmtAst,
-            setProjectBaseDirStmtAst: setProjectBaseDirStmtAst
+            setProjectBaseDirStmtAst: setProjectBaseDirStmtAst,
+            schemaStatement: schemaStatementAst
         }
     }
 
@@ -59,6 +61,34 @@ class DSLToAstVisitor extends BaseDSLVisitor {
             mongoURI: JSON.parse(MongoURI),
             dbUsername: JSON.parse(dbUsername),
             dbPassword: JSON.parse(dbPassword)
+        }
+    }
+
+    schemaStatement(ctx) {
+        const tableName = this.visit(ctx.nameClause);
+        const entry = this.visit(ctx.entryClause);
+        return {
+            type: "SCHEMA_STMT",
+            nameClause: tableName,
+            attr_Type_Clause: entry
+        }
+    }
+
+    nameClause(ctx) {
+        const name = ctx.StringLiteral[0].image;
+        return {
+            type: "NAME_CLAUSE",
+            Table_Name: name
+        }
+    }
+
+    entryClause(ctx) {
+        const attributeName = ctx.StringLiteral[0].image;
+        const attributeType = ctx.StringLiteral[1].image;
+        return {
+            type: "ENTRY_CLAUSE",
+            attribute: attributeName,
+            attributeType: attributeType
         }
     }
 
