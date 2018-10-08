@@ -11,18 +11,23 @@ describe("Chevrotain Tutorial", () => {
             let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/Sample.txt'), 'utf8');
             const ast = toAstVisitor(inputText);
 
-            let expectedConnectStatementAst = {
-                "dbPassword": "\"password123\"",
-                "dbUsername": "\"adilimtiaz\"",
-                "mongoURI": "\"ds111963.mlab.com:11963/emaily-dev\"",
+            let expectedConnectStmtAst = {
+                "dbPassword": "password123",
+                "dbUsername": "adilimtiaz",
+                "mongoURI": "ds111963.mlab.com:11963/emaily-dev",
                 "type": "CONNECT_STMT"
             };
 
 
+            let expectSetProjectBaseDirStmtAst = {
+                "path": "/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial/SampleBase",
+                "type": "SET_PROJECT_BASE_DIR_STMT"
+            };
+
             expect(ast).to.deep.equal({
                 type: "PROGRAM",
-                connectStatement: expectedConnectStatementAst
-
+                connectStmtAst: expectedConnectStmtAst,
+                setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst
             });
         })
     })

@@ -24,13 +24,29 @@ class DSLToAstVisitor extends BaseDSLVisitor {
 
     Program(ctx){
         // No need to visit start or end as they are only used to validate program syntax
-        let connectStatementAst = this.visit(ctx.connectStatement);
+        let connectStmtAst = this.visit(ctx.connectStatement);
+        let setProjectBaseDirStmtAst = this.visit(ctx.setProjectBaseDirStmt);
         let schemaStatementAst = this.visit(ctx.schemaStatement);
-
+          
         return {
             type: "PROGRAM",
-            connectStatement: connectStatementAst,
+            connectStmtAst: connectStmtAst,
+            setProjectBaseDirStmtAst: setProjectBaseDirStmtAst,
             schemaStatement: schemaStatementAst
+        }
+    }
+
+    setProjectBaseDirStmt(ctx){
+        let path;
+        if(ctx.UnixPath){
+            path = ctx.UnixPath[0].image;
+        }
+        else
+            path = ctx.WindowsPath[0].image;
+
+        return {
+            type: "SET_PROJECT_BASE_DIR_STMT",
+            path: JSON.parse(path)
         }
     }
 
@@ -42,9 +58,9 @@ class DSLToAstVisitor extends BaseDSLVisitor {
 
         return {
             type: "CONNECT_STMT",
-            mongoURI: MongoURI,
-            dbUsername: dbUsername,
-            dbPassword: dbPassword
+            mongoURI: JSON.parse(MongoURI),
+            dbUsername: JSON.parse(dbUsername),
+            dbPassword: JSON.parse(dbPassword)
         }
     }
 

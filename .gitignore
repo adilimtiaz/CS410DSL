@@ -1,5 +1,7 @@
 /node_modules
 .idea/
+/SampleBaseProject
 
 /typescript/*.js
 /coffeescript/*.js
+index.js
