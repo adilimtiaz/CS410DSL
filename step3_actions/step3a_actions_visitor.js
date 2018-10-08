@@ -6,36 +6,25 @@
 
 // Adding Actions(semantics) to our grammar using a CST Visitor.
 
-const selectLexer = require("../step1_lexing/step1_lexing")
+const selectLexer = require("../step1_lexing/step1_lexing");
 // re-using the parser implemented in step two.
-const parser = require("../step2_parsing/step2_parsing")
-const SelectParser = parser.SelectParser
+const parser = require("../step2_parsing/step2_parsing");
+const SelectParser = parser.SelectParser;
 
 // A new parser instance with CST output (enabled by default).
-const parserInstance = new SelectParser([])
+const parserInstance = new SelectParser([]);
 // The base visitor class can be accessed via the a parser instance.
-const BaseSQLVisitor = parserInstance.getBaseCstVisitorConstructor()
+const BaseSQLVisitor = parserInstance.getBaseCstVisitorConstructor();
 
 class SQLToAstVisitor extends BaseSQLVisitor {
     constructor() {
-        super()
-        this.validateVisitor()
-    }
+        super();
+        this.validateVisitor();
+    };
 
-    selectStatement(ctx) {
-        // "this.visit" can be used to visit none-terminals and will invoke the correct visit method for the CstNode passed.
-        const select = this.visit(ctx.selectClause)
-
-        //  "this.visit" can work on either a CstNode or an Array of CstNodes.
-        //  If an array is passed (ctx.fromClause is an array) it is equivalent
-        //  to passing the first element of that array
-        const from = this.visit(ctx.fromClause)
-
-        // "whereClause" is optional, "this.visit" will ignore empty arrays (optional)
-        const where = this.visit(ctx.whereClause)
-
+    connectStatement(ctx) {
         return {
-            type: "SELECT_STMT",
+            type: "CONNECT_STMT",
             selectClause: select,
             fromClause: from,
             whereClause: where
@@ -104,17 +93,17 @@ class SQLToAstVisitor extends BaseSQLVisitor {
 }
 
 // Our visitor has no state, so a single instance is sufficient.
-const toAstVisitorInstance = new SQLToAstVisitor()
+const toAstVisitorInstance = new SQLToAstVisitor();
 
 module.exports = {
     toAst: function(inputText) {
         const lexResult = selectLexer.lex(inputText)
 
         // ".input" is a setter which will reset the parser's internal's state.
-        parserInstance.input = lexResult.tokens
+        parserInstance.input = lexResult.tokens;
 
         // Automatic CST created when parsing
-        const cst = parserInstance.selectStatement()
+        const cst = parserInstance.connectStatement();
 
         if (parserInstance.errors.length > 0) {
             throw Error(

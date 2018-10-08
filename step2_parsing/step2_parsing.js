@@ -12,7 +12,6 @@ const Parser = require("chevrotain").Parser;
 const tokenVocabulary = selectLexer.tokenVocabulary;
 
 // individual imports, prefer ES6 imports if supported in your runtime/transpiler...
-const AlphanumericString = tokenVocabulary.Identifier;
 const Integer = tokenVocabulary.Integer;
 const GreaterThan = tokenVocabulary.GreaterThan;
 const LessThan = tokenVocabulary.LessThan;
@@ -35,22 +34,13 @@ class SelectParser extends Parser {
         $.RULE("connectStatement", () =>{
             $.CONSUME($.tokensMap.ConnectLiteral);
             $.CONSUME1($.tokensMap.LRound);
-            $.OR([
-                { ALT: () => $.CONSUME6($.tokensMap.AlphanumericString) },
-                { ALT: () => $.CONSUME7($.tokensMap.StringLiteral) }
-            ]);
-            $.CONSUME2($.tokensMap.Comma);
-            $.OR1([
-                { ALT: () => $.CONSUME8($.tokensMap.AlphanumericString) },
-                { ALT: () => $.CONSUME9($.tokensMap.StringLiteral) }
-            ]);
+            $.CONSUME2($.tokensMap.StringLiteral);
             $.CONSUME3($.tokensMap.Comma);
-            $.OR2([
-                { ALT: () => $.CONSUME($.tokensMap.AlphanumericString) },
-                { ALT: () => $.CONSUME($.tokensMap.StringLiteral) }
-            ]);
-            $.CONSUME4($.tokensMap.RRound);
-            $.CONSUME5($.tokensMap.Semicolon);
+            $.CONSUME4($.tokensMap.StringLiteral);
+            $.CONSUME5($.tokensMap.Comma);
+            $.CONSUME6($.tokensMap.StringLiteral);
+            $.CONSUME7($.tokensMap.RRound);
+            $.CONSUME8($.tokensMap.Semicolon);
         });
 
         // The "rhs" and "lhs" (Right/Left Hand Side) labels will provide easy
@@ -66,7 +56,7 @@ class SelectParser extends Parser {
         $.RULE("atomicExpression", () => {
             $.OR([
                 { ALT: () => $.CONSUME(NumberLiteral) },
-                { ALT: () => $.CONSUME(AlphanumericString) }
+                { ALT: () => $.CONSUME(StringLiteral) }
             ])
         });
 
@@ -99,7 +89,7 @@ module.exports = {
         parserInstance.input = lexResult.tokens
 
         // No semantic actions so this won't return anything yet.
-        parserInstance.connectStatement();
+        const cst = parserInstance.connectStatement();
 
         if (parserInstance.errors.length > 0) {
             throw Error(

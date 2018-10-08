@@ -6,7 +6,7 @@ const parse = require("./step2_parsing").parse
 describe("Chevrotain Tutorial", () => {
     context("Step 2 - Parsing", () => {
         it("Can Parse a simple input", () => {
-            let inputText = "Connect(\"dbUrl\",\"dbUserName\", \"Password\");";
+            let inputText = "Connect(\"ds111963.mlab.com:11963/emaily-dev\",\"dbUserName\", \"Password\");";
             expect(() => parse(inputText)).to.not.throw()
         });
 

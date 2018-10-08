@@ -11,11 +11,19 @@ const createToken = chevrotain.createToken;
 // the vocabulary will be exported and used in the Parser definition.
 const tokenVocabulary = {};
 
-const AlphanumericString = createToken({ name: "AlphanumericString", pattern: /[a-zA-Z0-9]\w*/ });
-const ConnectLiteral = createToken({name: "ConnectLiteral", pattern: /Connect/ , longer_alt: AlphanumericString});
-const True = createToken({ name: "True", pattern: /true/, longer_alt: AlphanumericString});
-const False = createToken({ name: "False", pattern: /false/, longer_alt: AlphanumericString});
-const Null = createToken({ name: "Null", pattern: /null/, longer_alt: AlphanumericString});
+
+const StringLiteral = createToken({
+    name: "StringLiteral",
+    pattern: /"[a-zA-Z0-9_\-:/\.]+"/
+});
+const MongoURI = createToken({
+   name: "MongoURI",
+   pattern: /\"?(([\w\.]+)?):(\d+)\/([\w\-]+)\"?/
+});
+const ConnectLiteral = createToken({name: "ConnectLiteral", pattern: /Connect/ , longer_alt: StringLiteral});
+const True = createToken({ name: "True", pattern: /true/, longer_alt: StringLiteral});
+const False = createToken({ name: "False", pattern: /false/, longer_alt: StringLiteral});
+const Null = createToken({ name: "Null", pattern: /null/, longer_alt: StringLiteral});
 const LRound = createToken({name: "LRound", pattern: /\(/});
 const RRound = createToken({name: "RRound", pattern: /\)/});
 const LCurly = createToken({ name: "LCurly", pattern: /{/});
@@ -23,15 +31,12 @@ const RCurly = createToken({ name: "RCurly", pattern: /}/ });
 const LSquare = createToken({ name: "LSquare", pattern: /\[/ });
 const RSquare = createToken({ name: "RSquare", pattern: /]/ });
 const Comma = createToken({ name: "Comma", pattern: /,/ });
-const Colon = createToken({ name: "Colon", pattern: /:/ });
+const Colon = createToken({ name: "Colon", pattern: /:/, longer_alt: StringLiteral });
 const Semicolon = createToken({ name: "Semicolon", pattern: /;/ });
-const StringLiteral = createToken({
-    name: "StringLiteral",
-    pattern: /"(?:[^\\"]|\\(?:[bfnrtv"\\/]|u[0-9a-fA-F]{4}))*"/
-});
 const NumberLiteral = createToken({
     name: "NumberLiteral",
-    pattern: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/
+    pattern: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/,
+    longer_alt: StringLiteral
 });
 const WhiteSpace = createToken({
     name: "WhiteSpace",
@@ -45,6 +50,7 @@ const LesserThan = createToken({name: "LesserThan" ,pattern: /</ });
 const allTokens = [
     ConnectLiteral,
     WhiteSpace,
+    MongoURI,
     NumberLiteral,
     LRound,
     RRound,
@@ -60,8 +66,7 @@ const allTokens = [
     Null,
     GreaterThan,
     LesserThan,
-    StringLiteral,
-    AlphanumericString
+    StringLiteral
 ];
 
 

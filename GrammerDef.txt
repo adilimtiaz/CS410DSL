@@ -1,2 +1,2 @@
 connectStatement
-    : Connect("AlphanumericString", "AlphanumericString", "AlphanumericString") // url, username, password
+    : Connect("StringLiteral", "StringLiteral", "StringLiteral") // url, username, password
