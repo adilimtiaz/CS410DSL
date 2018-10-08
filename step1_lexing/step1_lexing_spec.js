@@ -10,7 +10,6 @@ const path = require("path");
 describe("Chevrotain Tutorial", () => {
     context("Step 1 - Lexing", () => {
         it("Can Lex a connect statement", () => {
-            //let inputText = "CreateSchema(\"SCHEMANAME\",\"attribute\":\"type\", \"att2\":\"type2\")";
             const inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/Sample.txt'), 'utf8');
             let lexingResult = lex(inputText);
 
