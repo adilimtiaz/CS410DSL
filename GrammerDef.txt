@@ -1,2 +1,11 @@
+Program
+    : startStmt connectStatement (statements)* endStmt
+
+startStmt
+    : start
+
 connectStatement
     : Connect("StringLiteral", "StringLiteral", "StringLiteral") // url, username, password
+
+endStmt
+    : endStmt

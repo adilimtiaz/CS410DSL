@@ -31,6 +31,20 @@ class SelectParser extends Parser {
         // for conciseness
         const $ = this;
 
+        $.RULE("Program", () =>{
+           $.SUBRULE($.startStmt);
+           $.SUBRULE($.connectStatement);
+           $.SUBRULE($.endStmt);
+        });
+
+        $.RULE("startStmt", () =>{
+            $.CONSUME($.tokensMap.Start);
+        });
+
+        $.RULE("endStmt", () =>{
+            $.CONSUME($.tokensMap.End);
+        });
+
         $.RULE("connectStatement", () =>{
             $.CONSUME($.tokensMap.ConnectLiteral);
             $.CONSUME1($.tokensMap.LRound);
@@ -43,6 +57,7 @@ class SelectParser extends Parser {
             $.CONSUME8($.tokensMap.Semicolon);
         });
 
+        /**
         $.RULE("schemaStatement", () => {
             $.SUBRULE($.nameClause);
             $.SUBRULE($.attr_Type_Clause);
@@ -65,13 +80,14 @@ class SelectParser extends Parser {
 
             })
         });
+         **/
 
         // The "rhs" and "lhs" (Right/Left Hand Side) labels will provide easy
         // to use names during CST Visitor (step 3a).
         $.RULE("expression", () => {
-            $.SUBRULE($.tokensMap.atomicExpression, { LABEL: "lhs" })
-            $.SUBRULE($.tokensMap.relationalOperator)
-            $.SUBRULE2($.tokensMap.atomicExpression, { LABEL: "rhs" }) // note the '2' suffix to distinguish
+            $.SUBRULE($.tokensMap.atomicExpression, { LABEL: "lhs" });
+            $.SUBRULE($.tokensMap.relationalOperator);
+            $.SUBRULE2($.tokensMap.atomicExpression, { LABEL: "rhs" }); // note the '2' suffix to distinguish
             // from the 'SUBRULE(atomicExpression)'
             // 2 lines above.
         });
@@ -112,13 +128,12 @@ module.exports = {
         parserInstance.input = lexResult.tokens
 
         // No semantic actions so this won't return anything yet.
-        const cst = parserInstance.connectStatement();
+        const cst = parserInstance.Program();
 
         if (parserInstance.errors.length > 0) {
             throw Error(
-                "Sad sad panda, parsing errors detected!\n" +
-                    parserInstance.errors[0].message
+                parserInstance.errors[0].message
             )
         }
     }
-}
+};

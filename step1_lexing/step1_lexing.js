@@ -1,9 +1,4 @@
 "use strict"
-// Written Docs for this tutorial step can be found here:
-// https://github.com/SAP/chevrotain/blob/master/docs/tutorial/step1_lexing.md
-
-// Tutorial Step 1:
-// Implementation of A lexer for a simple SELECT statement grammar
 const chevrotain = require("chevrotain");
 const Lexer = chevrotain.Lexer;
 const createToken = chevrotain.createToken;
@@ -11,15 +6,21 @@ const createToken = chevrotain.createToken;
 // the vocabulary will be exported and used in the Parser definition.
 const tokenVocabulary = {};
 
-
 const StringLiteral = createToken({
     name: "StringLiteral",
     pattern: /"[a-zA-Z0-9_\-:/\.]+"/
 });
+const Start = createToken({name: "Start", pattern: /start/ , longer_alt: StringLiteral});
 const MongoURI = createToken({
    name: "MongoURI",
    pattern: /\"?(([\w\.]+)?):(\d+)\/([\w\-]+)\"?/
 });
+const EndOfLine = createToken({
+    name: "EndOfLine",
+    pattern: /\n|\r\n/,
+    group: Lexer.SKIPPED
+});
+const End = createToken({name: "End", pattern: /end/ , longer_alt: StringLiteral});
 const ConnectLiteral = createToken({name: "ConnectLiteral", pattern: /Connect/ , longer_alt: StringLiteral});
 const CreateSchema = createToken({name: "CreateSchema", pattern: /CreateSchema/, longer_alt: StringLiteral});
 const Name1 = createToken({name: "Name1", pattern: /Name/, longer_alt: StringLiteral});
@@ -50,7 +51,10 @@ const LesserThan = createToken({name: "LesserThan" ,pattern: /</ });
 
 
 const allTokens = [
+    Start,
+    End,
     ConnectLiteral,
+    EndOfLine,
     CreateSchema,
     Name1,
     WhiteSpace,
@@ -112,6 +116,6 @@ module.exports = {
             throw Error(JSON.stringify(lexingResult.errors.map(error => error.message)));
         }
 
-        return lexingResult
+        return lexingResult;
     }
 };

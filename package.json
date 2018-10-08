@@ -5,7 +5,9 @@
         "test": "mocha \"step*/*spec.js\""
     },
     "dependencies": {
-        "chevrotain": "*"
+        "chevrotain": "*",
+        "fs": "0.0.1-security",
+        "path": "^0.12.7"
     },
     "devDependencies": {
         "chai": "^4.1.2",
