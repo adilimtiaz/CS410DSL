@@ -6,11 +6,12 @@ const generators = require("../lib/generators");
 
 let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/Sample.txt'), 'utf8');
 
-let astFromVisitor = toAstVisitor(inputText);
+let programAst = toAstVisitor(inputText);
 
-let connectStatementAst = astFromVisitor.connectStatement;
+let connectStmtAst = programAst.connectStmtAst;
+let setProjectBaseDirStmtAst = programAst.setProjectBaseDirStmtAst;
 
-let mongoURI = generators.createMongoURI(connectStatementAst.mongoURI, connectStatementAst.dbUsername, connectStatementAst.dbPassword);
-generators.generateSampleIndexFile(mongoURI);
+let mongoURI = generators.createMongoURI(connectStmtAst.mongoURI, connectStmtAst.dbUsername, connectStmtAst.dbPassword);
+generators.generateSampleIndexFile(mongoURI, setProjectBaseDirStmtAst.path);
 
-console.log(JSON.stringify(astFromVisitor, null, "\t"));
+console.log(JSON.stringify(programAst, null, "\t"));
