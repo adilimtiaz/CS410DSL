@@ -43,6 +43,29 @@ class SelectParser extends Parser {
             $.CONSUME8($.tokensMap.Semicolon);
         });
 
+        $.RULE("schemaStatement", () => {
+            $.SUBRULE($.nameClause);
+            $.SUBRULE($.attr_Type_Clause);
+        });
+
+        $.RULE("nameClause", () => {
+            $.CONSUME($.tokensMap.Name1);
+            $.CONSUME1($.tokensMap.Colon1);
+            $.CONSUME2($.tokensMap.StringLiteral);
+        });
+
+        $.RULE("attr_Type_Clause", () => {
+            $.AT_LEAST_ONE_SEP({
+                SEP: Comma,
+                DEF: () => {
+                    $.CONSUME($.tokensMap.StringLiteral);
+                    $.CONSUME1(Colon1);
+                    $.CONSUME2($.tokensMap.StringLiteral);
+                }
+
+            })
+        });
+
         // The "rhs" and "lhs" (Right/Left Hand Side) labels will provide easy
         // to use names during CST Visitor (step 3a).
         $.RULE("expression", () => {
