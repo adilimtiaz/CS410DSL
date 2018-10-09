@@ -51,6 +51,7 @@ class DSLToAstVisitor extends BaseDSLVisitor {
     schemaStatement(ctx) {
         const tableName = this.visit(ctx.nameClause);
         const entry = this.visit(ctx.entryClause);
+        //const entry = ctx.entryClause.map(identToken => identToken.image)
         return {
             type: "SCHEMA_STMT",
             nameClause: tableName,

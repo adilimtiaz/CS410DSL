@@ -63,13 +63,17 @@ class SelectParser extends Parser {
             $.CONSUME($.tokensMap.LCurly);
             $.SUBRULE($.nameClause);
             $.CONSUME($.tokensMap.Comma);
+            $.CONSUME($.tokensMap.Fields);
+            $.CONSUME1($.tokensMap.Colon1);
+            $.CONSUME3($.tokensMap.LCurly);
             $.SUBRULE($.entryClause);
-            $.CONSUME($.tokensMap.RCurly);
+            $.CONSUME4($.tokensMap.RCurly);
+            $.CONSUME5($.tokensMap.RCurly);
             $.CONSUME($.tokensMap.Semicolon);
         });
 
         $.RULE("nameClause", () => {
-            $.CONSUME($.tokensMap.Name1);
+            $.CONSUME($.tokensMap.SchemaName);
             $.CONSUME1($.tokensMap.Colon1);
             $.CONSUME2($.tokensMap.StringLiteral);
         });
