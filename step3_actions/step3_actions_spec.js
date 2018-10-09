@@ -18,10 +18,23 @@ describe("Chevrotain Tutorial", () => {
                 "type": "CONNECT_STMT"
             };
 
+            let expectedSchemaStatementAst = {
+                "attr_Type_Clause": {
+                    "attribute": "\"ID\"",
+                    "attributeType": "\"Integer\"",
+                    "type": "ENTRY_CLAUSE"
+                },
+                "nameClause": {
+                    "Table_Name": "\"ATable\"",
+                    "type": "NAME_CLAUSE"
+                },
+                "type": "SCHEMA_STMT"
+            }
 
             expect(ast).to.deep.equal({
                 type: "PROGRAM",
-                connectStatement: expectedConnectStatementAst
+                connectStatement: expectedConnectStatementAst,
+                schemaStatement: expectedSchemaStatementAst
 
             });
         })
