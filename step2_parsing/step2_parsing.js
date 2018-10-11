@@ -34,7 +34,7 @@ class SelectParser extends Parser {
         $.RULE("Program", () =>{
            $.SUBRULE($.startStmt);
            $.SUBRULE($.connectStatement);
-           $.SUBRULE($.schemaStatement);
+           $.MANY(() => { $.SUBRULE($.schemaStatement); });
            $.SUBRULE($.endStmt);
         });
 
@@ -66,7 +66,7 @@ class SelectParser extends Parser {
             $.CONSUME($.tokensMap.Fields);
             $.CONSUME1($.tokensMap.Colon1);
             $.CONSUME3($.tokensMap.LCurly);
-            $.SUBRULE($.entryClause);
+            $.AT_LEAST_ONE_SEP({SEP: Comma, DEF: () => {$.SUBRULE($.entryClause);}});
             $.CONSUME4($.tokensMap.RCurly);
             $.CONSUME5($.tokensMap.RCurly);
             $.CONSUME($.tokensMap.Semicolon);
@@ -79,15 +79,9 @@ class SelectParser extends Parser {
         });
 
         $.RULE("entryClause", () => {
-            $.AT_LEAST_ONE_SEP({
-                SEP: Comma,
-                DEF: () => {
                     $.CONSUME($.tokensMap.StringLiteral);
                     $.CONSUME1($.tokensMap.Colon1);
                     $.CONSUME2($.tokensMap.StringLiteral);
-                }
-
-            })
         });
 
 
