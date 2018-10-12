@@ -29,9 +29,20 @@ let expectedSchemaStatementAst = {
     "type": "SCHEMA_STMT"
 }
 
-expect(ast).to.deep.equal({
-    type: "PROGRAM",
-    connectStatement: expectedConnectStatementAst,
-    schemaStatement: expectedSchemaStatementAst
+
+
+
+           let expectSetProjectBaseDirStmtAst = {
+                "path": "/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial/SampleBase",
+                "type": "SET_PROJECT_BASE_DIR_STMT"
+            };
+
+            expect(ast).to.deep.equal({
+                type: "PROGRAM",
+                connectStmtAst: expectedConnectStmtAst,
+                setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst
+            });
+        })
+    })
+
 });
- ***/

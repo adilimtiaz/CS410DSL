@@ -1,8 +1,17 @@
 const assert = require("assert")
 const toAstVisitor = require("./step3a_actions_visitor").toAst
+const fs = require("fs");
+const path = require("path");
+const generators = require("../lib/generators");
 
-let inputText = "SELECT column1, column2 FROM table2 WHERE column2 > 3"
+let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/Sample.txt'), 'utf8');
 
-let astFromVisitor = toAstVisitor(inputText)
+let programAst = toAstVisitor(inputText);
 
-console.log(JSON.stringify(astFromVisitor, null, "\t"))
+let connectStmtAst = programAst.connectStmtAst;
+let setProjectBaseDirStmtAst = programAst.setProjectBaseDirStmtAst;
+
+let mongoURI = generators.createMongoURI(connectStmtAst.mongoURI, connectStmtAst.dbUsername, connectStmtAst.dbPassword);
+generators.generateSampleIndexFile(mongoURI, setProjectBaseDirStmtAst.path);
+
+console.log(JSON.stringify(programAst, null, "\t"));

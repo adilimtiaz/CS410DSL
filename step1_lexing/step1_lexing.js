@@ -8,7 +8,7 @@ const tokenVocabulary = {};
 
 const StringLiteral = createToken({
     name: "StringLiteral",
-    pattern: /"[a-zA-Z0-9_\-:/\.]+"/
+    pattern: /"[^\/][a-zA-Z0-9_\-:/\.]+"/
 });
 const Start = createToken({name: "Start", pattern: /start/ , longer_alt: StringLiteral});
 const MongoURI = createToken({
@@ -20,6 +20,17 @@ const EndOfLine = createToken({
     pattern: /\n|\r\n/,
     group: Lexer.SKIPPED
 });
+const UnixPath = createToken({
+   name: "UnixPath",
+   pattern: /\"\/(.+)\/([^\/]+)\"/
+});
+
+const WindowsPath = createToken({
+   name: "WindowsPath",
+   pattern: /\"[a-zA-Z]:\\[\\\S|*\S]?.*\"/
+});
+
+const SetProjectBaseDir = createToken({name: "SetProjectBaseDir", pattern: /SetProjectBaseDir/});
 const End = createToken({name: "End", pattern: /end/ , longer_alt: StringLiteral});
 const ConnectLiteral = createToken({name: "ConnectLiteral", pattern: /Connect/ , longer_alt: StringLiteral});
 const CreateSchema = createToken({name: "CreateSchema", pattern: /CreateSchema/, longer_alt: StringLiteral});
@@ -54,6 +65,7 @@ const LesserThan = createToken({name: "LesserThan" ,pattern: /</ });
 const allTokens = [
     Start,
     End,
+    SetProjectBaseDir,
     ConnectLiteral,
     EndOfLine,
     CreateSchema,
@@ -76,7 +88,9 @@ const allTokens = [
     Null,
     GreaterThan,
     LesserThan,
-    StringLiteral
+    StringLiteral,
+    UnixPath,
+    WindowsPath
 ];
 
 

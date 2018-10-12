@@ -34,12 +34,25 @@ class SelectParser extends Parser {
         $.RULE("Program", () =>{
            $.SUBRULE($.startStmt);
            $.SUBRULE($.connectStatement);
+           $.SUBRULE($.setProjectBaseDirStmt);
            $.MANY(() => { $.SUBRULE($.schemaStatement); });
+           $.SUBRULE($.schemaStatement);
            $.SUBRULE($.endStmt);
         });
 
         $.RULE("startStmt", () =>{
             $.CONSUME($.tokensMap.Start);
+        });
+
+        $.RULE("setProjectBaseDirStmt", () =>{
+            $.CONSUME($.tokensMap.SetProjectBaseDir);
+            $.CONSUME($.tokensMap.LRound);
+            $.OR([
+                {ALT: () => $.CONSUME($.tokensMap.UnixPath)},
+                {ALT: () => $.CONSUME($.tokensMap.WindowsPath)}
+            ], {LABEL: "path"});
+            $.CONSUME($.tokensMap.RRound);
+            $.CONSUME($.tokensMap.Semicolon);
         });
 
         $.RULE("endStmt", () =>{
@@ -125,10 +138,10 @@ module.exports = {
     SelectParser: SelectParser,
 
     parse: function(inputText) {
-        const lexResult = selectLexer.lex(inputText)
+        const lexResult = selectLexer.lex(inputText);
 
         // ".input" is a setter which will reset the parser's internal's state.
-        parserInstance.input = lexResult.tokens
+        parserInstance.input = lexResult.tokens;
 
         // No semantic actions so this won't return anything yet.
         const cst = parserInstance.Program();

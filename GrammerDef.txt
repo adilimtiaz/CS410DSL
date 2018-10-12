@@ -1,11 +1,14 @@
 Program
-    : startStmt connectStatement (statements)* endStmt
+    : startStmt setProjectBaseDir connectStatement (statements)* endStmt
 
 startStmt
     : start
 
 connectStatement
-    : Connect("StringLiteral", "StringLiteral", "StringLiteral") // url, username, password
+    : Connect("StringLiteral", "StringLiteral", "StringLiteral"); // url, username, password
 
 endStmt
     : endStmt
+
+setProjectBaseDir
+    : setProjectBaseDir("Path");
