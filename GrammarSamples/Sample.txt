@@ -6,5 +6,6 @@ start
     CreateSchema{SchemaName:"BTable", Fields: {"ID":"Integer", "ProjectName":"String"}};
     CreateSchema{SchemaName:"CTable", Fields: {"Number":"Integer", "ProjectName":"String"}};
     Insert{TableName:"BTable", Values: [{"ID":"45", "ProjectName":"DSL"}, {"ID":"68", "Project":"DSL2"}]};
+    Delete{TableName:"BTable", Conditions: {"ID":"45", "ProjectName":"DSL"}};
     Update{TableName:"BTable", Conditions: {"ID":"45", "ProjectName":"DSL"}, Values: {"ProjectName":"DSL3"}};
 end

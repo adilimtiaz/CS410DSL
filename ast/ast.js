@@ -55,6 +55,9 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         } else if (ctx.hasOwnProperty("updateStatement")) {
             statementType = ctx.updateStatement[0].name;
             parameters = this.updateStatement(ctx.updateStatement[0].children);
+        } else if (ctx.hasOwnProperty("deleteStatement")) {
+            statementType = ctx.deleteStatement[0].name;
+            parameters = this.deleteStatement(ctx.deleteStatement[0].children);
         }
 
         return {
@@ -119,8 +122,6 @@ class DSLToAstVisitor extends BaseDSLVisitor {
     }
 
     updateStatement(ctx) {
-        console.dir(ctx);
-
         let tableName = JSON.parse(this.visit(ctx.tableNameClause));
         let conditions = [];
         ctx.conditionClause.forEach((condition) => {
@@ -137,6 +138,20 @@ class DSLToAstVisitor extends BaseDSLVisitor {
             tableName: tableName,
             conditions: conditions,
             values: values
+        }
+    }
+
+    deleteStatement(ctx) {
+        let tableName = JSON.parse(this.visit(ctx.tableNameClause));
+        let conditions = [];
+        ctx.conditionClause.forEach((condition) => {
+            let conditionsAst = this.valueClause(condition.children);
+            conditions.push(conditionsAst);
+        });
+
+        return {
+            tableName: tableName,
+            conditions: conditions
         }
     }
 

@@ -58,7 +58,8 @@ class Parser extends chevrotainParser {
             $.OR([
                 {ALT: () => $.SUBRULE($.createSchemaStatement)},
                 {ALT: () => $.SUBRULE($.insertStatement)},
-                {ALT: () => $.SUBRULE($.updateStatement)}
+                {ALT: () => $.SUBRULE($.updateStatement)},
+                {ALT: () => $.SUBRULE($.deleteStatement)}
             ], {LABEL: "statement"});
         });
 
@@ -119,6 +120,23 @@ class Parser extends chevrotainParser {
             });
             $.CONSUME8($.tokensMap.RCurly); //End values object
             $.CONSUME9($.tokensMap.RCurly);
+            $.CONSUME($.tokensMap.Semicolon);
+        });
+
+        $.RULE("deleteStatement", () => {
+            $.CONSUME($.tokensMap.Delete);
+            $.CONSUME($.tokensMap.LCurly);
+            $.SUBRULE($.tableNameClause);
+            $.CONSUME($.tokensMap.Comma);
+            $.CONSUME($.tokensMap.Conditions);
+            $.CONSUME1($.tokensMap.Colon1);
+            $.CONSUME2($.tokensMap.LCurly); //Start values object
+            $.MANY_SEP({
+                SEP: $.tokensMap.Comma,
+                DEF: () => {$.SUBRULE($.conditionClause);}
+            });
+            $.CONSUME3($.tokensMap.RCurly); //End values object
+            $.CONSUME4($.tokensMap.RCurly);
             $.CONSUME($.tokensMap.Semicolon);
         });
 
