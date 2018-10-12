@@ -1,6 +1,6 @@
-"use strict"
+"use strict";
 const chevrotain = require("chevrotain");
-const Lexer = chevrotain.Lexer;
+const chevrotainLexer = chevrotain.Lexer;
 const createToken = chevrotain.createToken;
 
 // the vocabulary will be exported and used in the Parser definition.
@@ -18,16 +18,16 @@ const MongoURI = createToken({
 const EndOfLine = createToken({
     name: "EndOfLine",
     pattern: /\n|\r\n/,
-    group: Lexer.SKIPPED
+    group: chevrotainLexer.SKIPPED
 });
 const UnixPath = createToken({
    name: "UnixPath",
-   pattern: /\"\/(.+)\/([^\/]+)\"/
+   pattern: /"\/(.+)\/([^\/\"]+)"/
 });
 
 const WindowsPath = createToken({
    name: "WindowsPath",
-   pattern: /\"[a-zA-Z]:\\[\\\S|*\S]?.*\"/
+   pattern: /"[a-zA-Z]:\\[\\\S|*\S]?.*"/
 });
 
 const SetProjectBaseDir = createToken({name: "SetProjectBaseDir", pattern: /SetProjectBaseDir/});
@@ -56,7 +56,7 @@ const NumberLiteral = createToken({
 const WhiteSpace = createToken({
     name: "WhiteSpace",
     pattern: /[ \t\n\r]+/,
-    group: Lexer.SKIPPED
+    group: chevrotainLexer.SKIPPED
 });
 const GreaterThan = createToken({name: "GreaterThan", pattern: />/ });
 const LesserThan = createToken({name: "LesserThan" ,pattern: /</ });
@@ -93,29 +93,7 @@ const allTokens = [
     WindowsPath
 ];
 
-
-
-// createToken is used to create a TokenType
-// The Lexer's output will contain an array of token Objects created by metadata
-
-
-
-
-
-// Regex matches all alphanumeric strings
-// connect(
-// Whitespace(*) Alphanum (At least one) Whitespace(*),
-// Whitespace(*) Alphanum (At least one) Whitespace(*),
-// Whitespace(*) Alphanum (At least one) Whitespace(*))
-/**
-const Connect = createToken({
-   name: "Connect",
-   pattern: /Connect\(+\s*"[A-Za-z0-9]+"\s*,\s*"[A-Za-z0-9]+"\s*,+\s*"[A-Za-z0-9]+"\)/,
-    longer_alt: Identifier
-});
- **/
-
-const SelectLexer = new Lexer(allTokens);
+const Lexer = new chevrotainLexer(allTokens);
 
 allTokens.forEach(tokenType => {
     tokenVocabulary[tokenType.name] = tokenType
@@ -125,7 +103,7 @@ module.exports = {
     tokenVocabulary: tokenVocabulary,
 
     lex: function(inputText) {
-        const lexingResult = SelectLexer.tokenize(inputText);
+        const lexingResult = Lexer.tokenize(inputText);
 
         if (lexingResult.errors.length > 0) {
             console.log(JSON.stringify(lexingResult.errors));

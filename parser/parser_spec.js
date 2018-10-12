@@ -1,12 +1,12 @@
 "use strict"
 const expect = require("chai").expect
 const _ = require("lodash")
-const parse = require("./step2_parsing").parse;
+const parse = require("./parser").parse;
 const fs = require("fs");
 const path = require("path");
 
-describe("Chevrotain Tutorial", () => {
-    context("Step 2 - Parsing", () => {
+describe("Parser", () => {
+    context("Parser tests", () => {
         it("Can Parse a simple input", () => {
             let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/Sample.txt'), 'utf8');
             expect(() => parse(inputText)).to.not.throw();
@@ -39,7 +39,5 @@ describe("Chevrotain Tutorial", () => {
                 "Expecting token of type --> End <-- but found --> '' <--"
             );
         })
-
-
     })
 });

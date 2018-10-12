@@ -1,10 +1,9 @@
-const assert = require("assert")
-const toAstVisitor = require("./step3a_actions_visitor").toAst
+const toAstVisitor = require("./ast/ast").toAst
 const fs = require("fs");
 const path = require("path");
-const generators = require("../lib/generators");
+const generators = require("./lib/generators");
 
-let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/Sample.txt'), 'utf8');
+let inputText = fs.readFileSync(path.join(__dirname ,'./GrammarSamples/Sample.txt'), 'utf8');
 
 let programAst = toAstVisitor(inputText);
 

@@ -3,7 +3,7 @@ const expect = require("chai").expect
 const _ = require("lodash")
 const tokenMatcher = require("chevrotain").tokenMatcher
 const lex = require("./step1_lexing").lex
-const parse = require("./step2_parsing").parse
+const parse = require("./parser").parse
 const toAstVisitor = require("./step3a_actions_visitor").toAst
 const toAstEmbedded = require("./step3b_actions_embedded").toAst
 const tokenVocabulary = require("./step1_lexing").tokenVocabulary
@@ -24,7 +24,7 @@ describe("Chevrotain Tutorial", () => {
             expect(tokens[2].image).to.equal("FROM")
             expect(tokens[3].image).to.equal("table2")
 
-            // tokenMatcher acts as an "instanceof" check for Tokens
+            // tokenMatcher acts ast an "instanceof" check for Tokens
             expect(tokenMatcher(tokens[0], tokenVocabulary.Select)).to.be.true
             expect(tokenMatcher(tokens[1], tokenVocabulary.Identifier)).to.be
                 .true
@@ -292,7 +292,7 @@ describe("Chevrotain Tutorial", () => {
             let objectItemCstArr =
                 minimizedCst.children.object[0].children.objectItem
             // The original input has 4 keys, but after recover the 3rd key should be skipped (re-synced)
-            // because the parser will re-sync to the next comma "," as that is the expected next Token after a key/value pair.
+            // because the parser will re-sync to the next comma "," ast that is the expected next Token after a key/value pair.
             expect(objectItemCstArr).to.have.lengthOf(3)
             expect(
                 objectItemCstArr[0].children.StringLiteral[0].image
