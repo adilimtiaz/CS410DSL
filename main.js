@@ -9,8 +9,18 @@ let programAst = toAstVisitor(inputText);
 
 let connectStmtAst = programAst.connectStmtAst;
 let setProjectBaseDirStmtAst = programAst.setProjectBaseDirStmtAst;
+let createSchemaStatementAst = programAst.createSchemaStmtAst;
+
+let projectBaseDir = setProjectBaseDirStmtAst.path;
 
 let mongoURI = generators.createMongoURI(connectStmtAst.mongoURI, connectStmtAst.dbUsername, connectStmtAst.dbPassword);
-generators.generateSampleIndexFile(mongoURI, setProjectBaseDirStmtAst.path);
+generators.generateSampleIndexFile(mongoURI, projectBaseDir);
+generators.generatePackageJSONAndReadme(projectBaseDir);
+
+let schemasToCreate = createSchemaStatementAst.schemas;
+schemasToCreate.forEach(schema => {
+    generators.generateModel(projectBaseDir, schema.schemaName, schema.fields);
+});
+
 
 console.log(JSON.stringify(programAst, null, "\t"));
