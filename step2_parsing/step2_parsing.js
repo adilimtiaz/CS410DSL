@@ -34,8 +34,9 @@ class SelectParser extends Parser {
         $.RULE("Program", () =>{
            $.SUBRULE($.startStmt);
            $.SUBRULE($.connectStatement);
-           $.SUBRULE($.schemaStatement);
            $.SUBRULE($.setProjectBaseDirStmt);
+           $.MANY(() => { $.SUBRULE($.schemaStatement); });
+           $.SUBRULE($.schemaStatement);
            $.SUBRULE($.endStmt);
         });
 
@@ -75,27 +76,25 @@ class SelectParser extends Parser {
             $.CONSUME($.tokensMap.LCurly);
             $.SUBRULE($.nameClause);
             $.CONSUME($.tokensMap.Comma);
-            $.SUBRULE($.entryClause);
-            $.CONSUME($.tokensMap.RCurly);
+            $.CONSUME($.tokensMap.Fields);
+            $.CONSUME1($.tokensMap.Colon1);
+            $.CONSUME3($.tokensMap.LCurly);
+            $.AT_LEAST_ONE_SEP({SEP: Comma, DEF: () => {$.SUBRULE($.entryClause);}});
+            $.CONSUME4($.tokensMap.RCurly);
+            $.CONSUME5($.tokensMap.RCurly);
             $.CONSUME($.tokensMap.Semicolon);
         });
 
         $.RULE("nameClause", () => {
-            $.CONSUME($.tokensMap.Name1);
+            $.CONSUME($.tokensMap.SchemaName);
             $.CONSUME1($.tokensMap.Colon1);
             $.CONSUME2($.tokensMap.StringLiteral);
         });
 
         $.RULE("entryClause", () => {
-            $.AT_LEAST_ONE_SEP({
-                SEP: Comma,
-                DEF: () => {
                     $.CONSUME($.tokensMap.StringLiteral);
                     $.CONSUME1($.tokensMap.Colon1);
                     $.CONSUME2($.tokensMap.StringLiteral);
-                }
-
-            })
         });
 
 

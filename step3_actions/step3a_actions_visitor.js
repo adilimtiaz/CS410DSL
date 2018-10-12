@@ -10,6 +10,7 @@ const selectLexer = require("../step1_lexing/step1_lexing");
 // re-using the parser implemented in step two.
 const parser = require("../step2_parsing/step2_parsing");
 const SelectParser = parser.SelectParser;
+const util = require("util");
 
 // A new parser instance with CST output (enabled by default).
 const parserInstance = new SelectParser([]);
@@ -27,6 +28,11 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         let connectStmtAst = this.visit(ctx.connectStatement);
         let setProjectBaseDirStmtAst = this.visit(ctx.setProjectBaseDirStmt);
         let schemaStatementAst = this.visit(ctx.schemaStatement);
+        let schemas = [];
+        ctx.schemaStatement.forEach((entry) => {
+            const entryEval = this.schemaStatement(entry.children);
+            schemas.push(entryEval);
+        });
           
         return {
             type: "PROGRAM",
@@ -52,9 +58,9 @@ class DSLToAstVisitor extends BaseDSLVisitor {
 
 
     connectStatement(ctx) {
-        const MongoURI = ctx.MongoURI[0].image;
-        const dbUsername = ctx.StringLiteral[0].image; //First string is username
-        const dbPassword = ctx.StringLiteral[1].image; //second is password
+        const MongoURI = ctx.MongoURI[0].image.replace(/\"/g, "");
+        const dbUsername = ctx.StringLiteral[0].image.replace(/\"/g, ""); //First string is username
+        const dbPassword = ctx.StringLiteral[1].image.replace(/\"/g, ""); //second is password
 
         return {
             type: "CONNECT_STMT",
@@ -66,16 +72,21 @@ class DSLToAstVisitor extends BaseDSLVisitor {
 
     schemaStatement(ctx) {
         const tableName = this.visit(ctx.nameClause);
-        const entry = this.visit(ctx.entryClause);
+        var entries = [];
+        ctx.entryClause.forEach((entry) => {
+            const entryEval = this.entryClause(entry.children);
+            entries.push(entryEval);
+        });
+
         return {
             type: "SCHEMA_STMT",
             nameClause: tableName,
-            attr_Type_Clause: entry
+            attr_Type_Clause: util.inspect(entries)
         }
     }
 
     nameClause(ctx) {
-        const name = ctx.StringLiteral[0].image;
+        const name = ctx.StringLiteral[0].image.replace(/\"/g, "");
         return {
             type: "NAME_CLAUSE",
             Table_Name: name
@@ -83,8 +94,8 @@ class DSLToAstVisitor extends BaseDSLVisitor {
     }
 
     entryClause(ctx) {
-        const attributeName = ctx.StringLiteral[0].image;
-        const attributeType = ctx.StringLiteral[1].image;
+        const attributeName = ctx.StringLiteral[0].image.replace(/\"/g, "");
+        const attributeType = ctx.StringLiteral[1].image.replace(/\"/g, "");
         return {
             type: "ENTRY_CLAUSE",
             attribute: attributeName,
