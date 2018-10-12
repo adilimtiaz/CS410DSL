@@ -27,18 +27,18 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         // No need to visit start or end ast they are only used to validate program syntax
         let connectStmtAst = this.visit(ctx.connectStatement);
         let setProjectBaseDirStmtAst = this.visit(ctx.setProjectBaseDirStmt);
-        let createSchemaStatementAst = this.visit(ctx.createSchemaStatement);
         let schemas = [];
         ctx.createSchemaStatement.forEach((statement) => {
             const schema = this.createSchemaStatement(statement.children);
             schemas.push(schema);
         });
+        let createSchemaStmtAst = {type: "CREATE_SCHEMA_STMT", schemas: schemas};
 
         return {
             type: "PROGRAM",
             connectStmtAst: connectStmtAst,
             setProjectBaseDirStmtAst: setProjectBaseDirStmtAst,
-            createSchemaStmtAst: createSchemaStatementAst
+            createSchemaStmtAst: createSchemaStmtAst
         }
     }
 
@@ -71,23 +71,22 @@ class DSLToAstVisitor extends BaseDSLVisitor {
     }
 
     createSchemaStatement(ctx) {
-        let tableName = JSON.parse(this.visit(ctx.nameClause));
+        let schemaName = JSON.parse(this.visit(ctx.nameClause));
         let fields = [];
         ctx.fieldClause.forEach((field) => {
-            const fieldAst = this.fieldClause(field.children);
+            let fieldAst = this.fieldClause(field.children);
             fields.push(fieldAst);
         });
 
         return {
-            type: "CREATE_SCHEMA_STMT",
-            tableName: tableName,
+            schemaName: schemaName,
             fields: fields
         }
     }
 
     nameClause(ctx) {
-        let tableName = ctx.StringLiteral[0].image;
-        return tableName;
+        let schemaName = ctx.StringLiteral[0].image;
+        return schemaName;
     }
 
     fieldClause(ctx) {

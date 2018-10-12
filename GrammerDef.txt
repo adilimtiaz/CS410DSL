@@ -12,3 +12,9 @@ endStmt
 
 setProjectBaseDir
     : setProjectBaseDir("Path");
+
+statement
+    : createSchemaStmt | insertSchemastmt
+
+createSchemaStmt:
+    : createSchema(SchemaName: "StringLiteral" , fields: {(fieldName: fieldType)+,});
