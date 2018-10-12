@@ -3,5 +3,5 @@ start
     SetProjectBaseDir("/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial");
     CreateSchema{SchemaName:"ATable", Fields: {"ID":"Number", "StudentName":"String"}};
     CreateSchema{SchemaName:"BTable", Fields: {"ID":"Number", "ProjectName":"String"}};
-    CreateSchema{SchemaName:"CTable", Fields: {"Number":"Number", "ProjectName":"String"}};
+    CreateSchema{SchemaName:"CTable", Fields: {"Number":"Number", "ProjectName":"ArrayOfStrings"}};
 end
