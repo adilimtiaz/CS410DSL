@@ -1,8 +1,9 @@
 {
-    "name": "chevrotain_examples_tutorial",
+    "name": "CS410DSL",
     "version": "0.1.0",
     "scripts": {
-        "test": "mocha \"step*/*spec.js\""
+        "test": "mocha \"*/*spec.js\"",
+        "start": "node main.js"
     },
     "dependencies": {
         "chevrotain": "*",
