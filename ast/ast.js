@@ -34,11 +34,19 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         });
         let createSchemaStmtAst = {type: "CREATE_SCHEMA_STMT", schemas: schemas};
 
+        let inserts = [];
+        ctx.insertStatement.forEach((statement) => {
+            const insert = this.insertStatement(statement.children);
+            inserts.push(insert);
+        });
+        let insertStmtAst = {type: "INSERT_STMT", inserts: inserts};
+
         return {
             type: "PROGRAM",
             connectStmtAst: connectStmtAst,
             setProjectBaseDirStmtAst: setProjectBaseDirStmtAst,
-            createSchemaStmtAst: createSchemaStmtAst
+            createSchemaStmtAst: createSchemaStmtAst,
+            insertStmtAst: insertStmtAst
         }
     }
 
@@ -84,9 +92,28 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         }
     }
 
+    insertStatement(ctx) {
+        let tableName = JSON.parse(this.visit(ctx.tableNameClause));
+        let rows = [];
+        ctx.rowClause.forEach((row) => {
+            let rowAst = this.rowClause(row.children);
+            rows.push(rowAst);
+        });
+
+        return {
+            tableName: tableName,
+            rows: rows
+        }
+    }
+
     nameClause(ctx) {
         let schemaName = ctx.StringLiteral[0].image;
         return schemaName;
+    }
+
+    tableNameClause(ctx) {
+        let tableName = ctx.StringLiteral[0].image;
+        return tableName;
     }
 
     fieldClause(ctx) {
@@ -95,6 +122,27 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         return {
             fieldName: JSON.parse(fieldName),
             fieldType: JSON.parse(fieldType)
+        }
+    }
+
+    rowClause(ctx) {
+        let values = [];
+        ctx.valueClause.forEach((value) => {
+           let valueAst = this.valueClause(value.children);
+           values.push(valueAst);
+        });
+
+        return {
+            values: values
+        }
+    }
+
+    valueClause(ctx) {
+        let fieldName = ctx.StringLiteral[0].image;
+        let fieldValue = ctx.StringLiteral[1].image;
+        return {
+            fieldName: JSON.parse(fieldName),
+            fieldValue: JSON.parse(fieldValue)
         }
     }
 }
@@ -114,7 +162,7 @@ module.exports = {
 
         if (parserInstance.errors.length > 0) {
             throw Error(
-                "Sad sad panda, parsing errors detected!\n" +
+                "Oh no, parsing errors detected!\n" +
                     parserInstance.errors[0].message
             )
         }

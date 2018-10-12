@@ -20,6 +20,7 @@ class Parser extends chevrotainParser {
            $.SUBRULE($.connectStatement);
            $.SUBRULE($.setProjectBaseDirStmt);
            $.MANY(() => { $.SUBRULE($.createSchemaStatement); });
+           $.MANY1(() => { $.SUBRULE($.insertStatement); });
            $.SUBRULE($.endStmt);
         });
 
@@ -64,11 +65,28 @@ class Parser extends chevrotainParser {
             $.CONSUME3($.tokensMap.LCurly); //Start fields object
             $.AT_LEAST_ONE_SEP({
                 SEP: $.tokensMap.Comma,
-                DEF: () => {$.SUBRULE($.fieldClause)}
+                DEF: () => {$.SUBRULE($.fieldClause);}
             });
             $.CONSUME4($.tokensMap.RCurly); //End fields object
             $.CONSUME5($.tokensMap.RCurly); //End create Schema JSON
             $.CONSUME($.tokensMap.Semicolon);
+        });
+
+        $.RULE("insertStatement", () => {
+           $.CONSUME($.tokensMap.Insert);
+           $.CONSUME($.tokensMap.LCurly);
+           $.SUBRULE($.tableNameClause);
+           $.CONSUME($.tokensMap.Comma);
+           $.CONSUME($.tokensMap.Values);
+           $.CONSUME1($.tokensMap.Colon1);
+           $.CONSUME2($.tokensMap.LSquare); //Start values object
+           $.MANY_SEP({
+               SEP: $.tokensMap.Comma,
+               DEF: () => {$.SUBRULE($.rowClause);}
+           });
+           $.CONSUME3($.tokensMap.RSquare); //End values object
+           $.CONSUME4($.tokensMap.RCurly);
+           $.CONSUME($.tokensMap.Semicolon);
         });
 
         $.RULE("nameClause", () => {
@@ -77,7 +95,28 @@ class Parser extends chevrotainParser {
             $.CONSUME2($.tokensMap.StringLiteral);
         });
 
+        $.RULE("tableNameClause", () => {
+            $.CONSUME($.tokensMap.TableName);
+            $.CONSUME1($.tokensMap.Colon1);
+            $.CONSUME2($.tokensMap.StringLiteral);
+        });
+
         $.RULE("fieldClause", () => {
+            $.CONSUME($.tokensMap.StringLiteral);
+            $.CONSUME1($.tokensMap.Colon1);
+            $.CONSUME2($.tokensMap.StringLiteral);
+        });
+
+        $.RULE("rowClause", () => {
+            $.CONSUME($.tokensMap.LCurly);
+            $.MANY_SEP({
+                SEP: $.tokensMap.Comma,
+                DEF: () => {$.SUBRULE($.valueClause);}
+            });
+            $.CONSUME($.tokensMap.RCurly);
+        });
+
+        $.RULE("valueClause", () => {
             $.CONSUME($.tokensMap.StringLiteral);
             $.CONSUME1($.tokensMap.Colon1);
             $.CONSUME2($.tokensMap.StringLiteral);
