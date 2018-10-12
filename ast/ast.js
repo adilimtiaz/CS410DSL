@@ -27,26 +27,39 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         // No need to visit start or end ast they are only used to validate program syntax
         let connectStmtAst = this.visit(ctx.connectStatement);
         let setProjectBaseDirStmtAst = this.visit(ctx.setProjectBaseDirStmt);
-        let schemas = [];
-        ctx.createSchemaStatement.forEach((statement) => {
-            const schema = this.createSchemaStatement(statement.children);
-            schemas.push(schema);
+        let statements = [];
+        ctx.statement.forEach((stmt) => {
+            const stmtContent = this.statement(stmt.children);
+            statements.push(stmtContent);
         });
-        let createSchemaStmtAst = {type: "CREATE_SCHEMA_STMT", schemas: schemas};
-
-        let inserts = [];
-        ctx.insertStatement.forEach((statement) => {
-            const insert = this.insertStatement(statement.children);
-            inserts.push(insert);
-        });
-        let insertStmtAst = {type: "INSERT_STMT", inserts: inserts};
+        let statementAst = {type: "STATEMENT", statements: statements};
 
         return {
             type: "PROGRAM",
             connectStmtAst: connectStmtAst,
             setProjectBaseDirStmtAst: setProjectBaseDirStmtAst,
-            createSchemaStmtAst: createSchemaStmtAst,
-            insertStmtAst: insertStmtAst
+            statementAst: statementAst
+        }
+    }
+
+    statement(ctx){
+        let statementType = "";
+        let parameters = null;
+
+        if (ctx.hasOwnProperty("createSchemaStatement")) {
+            statementType = ctx.createSchemaStatement[0].name;
+            parameters = this.createSchemaStatement(ctx.createSchemaStatement[0].children);
+        } else if (ctx.hasOwnProperty("insertStatement")) {
+            statementType = ctx.insertStatement[0].name;
+            parameters = this.insertStatement(ctx.insertStatement[0].children);
+        } else if (ctx.hasOwnProperty("updateStatement")) {
+            statementType = ctx.updateStatement[0].name;
+            parameters = this.updateStatement(ctx.updateStatement[0].children);
+        }
+
+        return {
+            statementType: statementType,
+            parameters: parameters
         }
     }
 
@@ -63,7 +76,6 @@ class DSLToAstVisitor extends BaseDSLVisitor {
             path: JSON.parse(path)
         }
     }
-
 
     connectStatement(ctx) {
         let MongoURI = ctx.MongoURI[0].image;
@@ -103,6 +115,28 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         return {
             tableName: tableName,
             rows: rows
+        }
+    }
+
+    updateStatement(ctx) {
+        console.dir(ctx);
+
+        let tableName = JSON.parse(this.visit(ctx.tableNameClause));
+        let conditions = [];
+        ctx.conditionClause.forEach((condition) => {
+            let conditionsAst = this.valueClause(condition.children);
+            conditions.push(conditionsAst);
+        });
+        let values = [];
+        ctx.valueClause.forEach((value) => {
+            let valuesAst = this.valueClause(value.children);
+            values.push(valuesAst);
+        });
+
+        return {
+            tableName: tableName,
+            conditions: conditions,
+            values: values
         }
     }
 

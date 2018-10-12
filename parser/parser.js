@@ -19,8 +19,7 @@ class Parser extends chevrotainParser {
            $.SUBRULE($.startStmt);
            $.SUBRULE($.connectStatement);
            $.SUBRULE($.setProjectBaseDirStmt);
-           $.MANY(() => { $.SUBRULE($.createSchemaStatement); });
-           $.MANY1(() => { $.SUBRULE($.insertStatement); });
+           $.MANY(() => {$.SUBRULE($.statement);});
            $.SUBRULE($.endStmt);
         });
 
@@ -53,6 +52,14 @@ class Parser extends chevrotainParser {
             $.CONSUME6($.tokensMap.StringLiteral);
             $.CONSUME7($.tokensMap.RRound);
             $.CONSUME8($.tokensMap.Semicolon);
+        });
+
+        $.RULE("statement", () => {
+            $.OR([
+                {ALT: () => $.SUBRULE($.createSchemaStatement)},
+                {ALT: () => $.SUBRULE($.insertStatement)},
+                {ALT: () => $.SUBRULE($.updateStatement)}
+            ], {LABEL: "statement"});
         });
 
         $.RULE("createSchemaStatement", () => {
@@ -89,6 +96,32 @@ class Parser extends chevrotainParser {
            $.CONSUME($.tokensMap.Semicolon);
         });
 
+        $.RULE("updateStatement", () => {
+            $.CONSUME($.tokensMap.Update);
+            $.CONSUME($.tokensMap.LCurly);
+            $.SUBRULE($.tableNameClause);
+            $.CONSUME($.tokensMap.Comma);
+            $.CONSUME($.tokensMap.Conditions);
+            $.CONSUME1($.tokensMap.Colon1);
+            $.CONSUME2($.tokensMap.LCurly); //Start conditions object
+            $.MANY_SEP({
+                SEP: $.tokensMap.Comma,
+                DEF: () => {$.SUBRULE($.conditionClause);}
+            });
+            $.CONSUME3($.tokensMap.RCurly); //End conditions object
+            $.CONSUME4($.tokensMap.Comma);
+            $.CONSUME5($.tokensMap.Values);
+            $.CONSUME6($.tokensMap.Colon1);
+            $.CONSUME7($.tokensMap.LCurly); //Start values object
+            $.MANY_SEP1({
+                SEP: $.tokensMap.Comma,
+                DEF: () => {$.SUBRULE($.valueClause);}
+            });
+            $.CONSUME8($.tokensMap.RCurly); //End values object
+            $.CONSUME9($.tokensMap.RCurly);
+            $.CONSUME($.tokensMap.Semicolon);
+        });
+
         $.RULE("nameClause", () => {
             $.CONSUME($.tokensMap.SchemaName);
             $.CONSUME1($.tokensMap.Colon1);
@@ -114,6 +147,12 @@ class Parser extends chevrotainParser {
                 DEF: () => {$.SUBRULE($.valueClause);}
             });
             $.CONSUME($.tokensMap.RCurly);
+        });
+
+        $.RULE("conditionClause", () => {
+            $.CONSUME($.tokensMap.StringLiteral);
+            $.CONSUME1($.tokensMap.Colon1);
+            $.CONSUME2($.tokensMap.StringLiteral);
         });
 
         $.RULE("valueClause", () => {
