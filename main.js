@@ -7,20 +7,36 @@ let inputText = fs.readFileSync(path.join(__dirname ,'./GrammarSamples/Sample.tx
 
 let programAst = toAstVisitor(inputText);
 
+console.log(programAst);
 let connectStmtAst = programAst.connectStmtAst;
 let setProjectBaseDirStmtAst = programAst.setProjectBaseDirStmtAst;
 let createSchemaStatementAst = programAst.createSchemaStmtAst;
 
+
 let projectBaseDir = setProjectBaseDirStmtAst.path;
 
+//TODO: Add projectName
+let projectName = "myProject";
+
 let mongoURI = generators.createMongoURI(connectStmtAst.mongoURI, connectStmtAst.dbUsername, connectStmtAst.dbPassword);
-generators.generateSampleIndexFile(mongoURI, projectBaseDir);
-generators.generatePackageJSONAndReadme(projectBaseDir);
+//generators.generateSampleIndexFile(mongoURI, projectBaseDir);
+
 
 let schemasToCreate = createSchemaStatementAst.schemas;
-schemasToCreate.forEach(schema => {
-    generators.generateModel(projectBaseDir, schema.schemaName, schema.fields);
-});
 
+
+generators.generatePackageJSONAndReadme(projectBaseDir);
+let schemaNames = [];
+schemasToCreate.forEach(schema => {
+    schemaNames.push(schema.schemaName);
+    generators.generateModel(projectBaseDir, projectName, schema.schemaName, schema.fields);
+    generators.generateController(projectBaseDir, projectName, schema.schemaName);
+    generators.generateRoutes(projectBaseDir,projectName,schema.schemaName);
+
+});
+generators.generateIndexFile(projectBaseDir,projectName,schemaNames,mongoURI);
+
+//TODO: Add Insert Statements
+// for each insert statement: insertIntoSchema
 
 console.log(JSON.stringify(programAst, null, "\t"));
