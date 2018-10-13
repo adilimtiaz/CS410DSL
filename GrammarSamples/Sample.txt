@@ -1,9 +1,13 @@
 start
     Connect("ds111963.mlab.com:11963/emaily-dev", "adilimtiaz", "password123");
-    SetProjectBaseDir("C:/Users/Kushal K/Documents/cpsc 410/CS410DSL");
-    CreateSchema{SchemaName:"ATable", Fields: {"ID":"Number", "StudentName":"String"}};
-    CreateSchema{SchemaName:"BTable", Fields: {"ID":"Number", "ProjectName":"String"}};
-    CreateSchema{SchemaName:"CTable", Fields: {"Number":"Number", "ProjectName":"ArrayOfStrings"}};
+    SetProjectBaseDir("/Users/raymondsushi/Desktop/CS410DSLoutput");
+    CreateSchema{SchemaName:"ATable", Fields: {"ID":"Integer", "StudentName":"String"}};
+    Insert{TableName:"ATable", Values: [{"ID":"45", "StudentName":"Bob"}, {"ID":"56", "StudentName":"Dave"}]};
+    CreateSchema{SchemaName:"BTable", Fields: {"ID":"Integer", "ProjectName":"String"}};
+    CreateSchema{SchemaName:"CTable", Fields: {"Number":"Integer", "ProjectName":"String"}};
+    Insert{TableName:"BTable", Values: [{"ID":"45", "ProjectName":"DSL"}, {"ID":"68", "Project":"DSL2"}]};
+    Delete{TableName:"BTable", Conditions: {"ID":"45", "ProjectName":"DSL"}};
+    Update{TableName:"BTable", Conditions: {"ID":"45", "ProjectName":"DSL"}, Values: {"ProjectName":"DSL3"}};
 end
 
 

@@ -1,5 +1,5 @@
 Program
-    : startStmt setProjectBaseDir connectStatement (statements)* endStmt
+    : startStmt connectStatement setProjectBaseDir (statements)* endStmt
 
 startStmt
     : start
@@ -14,7 +14,17 @@ setProjectBaseDir
     : setProjectBaseDir("Path");
 
 statement
-    : createSchemaStmt | insertSchemastmt
+    : createSchemaStmt | insertSchemaStmt | deleteStmt | insertStmt | updateStmt
 
 createSchemaStmt:
     : createSchema(SchemaName: "StringLiteral" , fields: {(fieldName: fieldType)+,});
+
+insertSchemaStmt:
+    : Insert{TableName: "StringLiteral", Values: :[{"StringLiteral":"StringLiteral, "StringLiteral":"StringLiteral"}+,]};
+
+deleteStmt:
+    : Delete{TableName: "StringLiteral", Conditions: {"StringLiteral":"StringLiteral, "StringLiteral":"StringLiteral"}};
+
+updateStmt:
+    : Update{TableName: "StringLiteral", Conditions: {"StringLiteral": "StringLiteral, "StringLiteral": "StringLiteral"}, Values: {"StringLiteral": "StringLiteral"}}
+

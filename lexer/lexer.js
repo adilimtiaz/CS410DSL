@@ -36,6 +36,12 @@ const ConnectLiteral = createToken({name: "ConnectLiteral", pattern: /Connect/ ,
 const CreateSchema = createToken({name: "CreateSchema", pattern: /CreateSchema/, longer_alt: StringLiteral});
 const SchemaName = createToken({name: "SchemaName", pattern: /SchemaName/, longer_alt: StringLiteral});
 const Fields = createToken({name: "Fields", pattern: /Fields/, longer_alt: StringLiteral});
+const Insert = createToken({name: "Insert", pattern: /Insert/, longer_alt: StringLiteral});
+const TableName = createToken({name: "TableName", pattern: /TableName/, longer_alt: StringLiteral});
+const Values = createToken({name: "Values", pattern: /Values/, longer_alt: StringLiteral});
+const Update = createToken({name: "Update", pattern: /Update/, longer_alt: StringLiteral});
+const Conditions = createToken({name: "Conditions", pattern: /Conditions/, longer_alt: StringLiteral});
+const Delete = createToken({name: "Delete", pattern: /Delete/, longer_alt: StringLiteral});
 const True = createToken({ name: "True", pattern: /true/, longer_alt: StringLiteral});
 const False = createToken({ name: "False", pattern: /false/, longer_alt: StringLiteral});
 const Null = createToken({ name: "Null", pattern: /null/, longer_alt: StringLiteral});
@@ -71,6 +77,12 @@ const allTokens = [
     CreateSchema,
     SchemaName,
     Fields,
+    Insert,
+    TableName,
+    Values,
+    Update,
+    Conditions,
+    Delete,
     WhiteSpace,
     MongoURI,
     NumberLiteral,
