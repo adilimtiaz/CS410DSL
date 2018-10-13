@@ -1,7 +1,10 @@
 start
     Connect("ds111963.mlab.com:11963/emaily-dev", "adilimtiaz", "password123");
-    SetProjectBaseDir("/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial");
+    SetProjectBaseDir("C:/Users/Kushal K/Documents/cpsc 410/CS410DSL");
     CreateSchema{SchemaName:"ATable", Fields: {"ID":"Number", "StudentName":"String"}};
     CreateSchema{SchemaName:"BTable", Fields: {"ID":"Number", "ProjectName":"String"}};
     CreateSchema{SchemaName:"CTable", Fields: {"Number":"Number", "ProjectName":"ArrayOfStrings"}};
 end
+
+
+
