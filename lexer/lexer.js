@@ -31,6 +31,7 @@ const WindowsPath = createToken({
 });
 
 const SetProjectBaseDir = createToken({name: "SetProjectBaseDir", pattern: /SetProjectBaseDir/});
+const SetProjectName = createToken({name: "SetProjectName", pattern: /SetProjectName/});
 const End = createToken({name: "End", pattern: /end/ , longer_alt: StringLiteral});
 const ConnectLiteral = createToken({name: "ConnectLiteral", pattern: /Connect/ , longer_alt: StringLiteral});
 const CreateSchema = createToken({name: "CreateSchema", pattern: /CreateSchema/, longer_alt: StringLiteral});
@@ -66,6 +67,7 @@ const allTokens = [
     Start,
     End,
     SetProjectBaseDir,
+    SetProjectName,
     ConnectLiteral,
     EndOfLine,
     CreateSchema,
