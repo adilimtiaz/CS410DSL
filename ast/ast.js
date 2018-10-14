@@ -17,6 +17,9 @@ const parserInstance = new Parser([]);
 // The base visitor class can be accessed via the a parser instance.
 const BaseDSLVisitor = parserInstance.getBaseCstVisitorConstructorWithDefaults();
 
+const ProjectNameStmtAstType =  "SET_PROJECT_NAME_STMT";
+const DefaultProjectNameAst = {type: ProjectNameStmtAstType, name: "myProject"};
+
 class DSLToAstVisitor extends BaseDSLVisitor {
     constructor() {
         super();
@@ -27,6 +30,13 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         // No need to visit start or end ast they are only used to validate program syntax
         let connectStmtAst = this.visit(ctx.connectStatement);
         let setProjectBaseDirStmtAst = this.visit(ctx.setProjectBaseDirStmt);
+        let setProjectNameStmtAst;
+        if(ctx.setProjectNameStmt) {
+            setProjectNameStmtAst = this.visit(ctx.setProjectNameStmt);
+        } else {
+            setProjectNameStmtAst = DefaultProjectNameAst;
+        }
+
         let schemas = [];
         ctx.createSchemaStatement.forEach((statement) => {
             const schema = this.createSchemaStatement(statement.children);
@@ -38,6 +48,7 @@ class DSLToAstVisitor extends BaseDSLVisitor {
             type: "PROGRAM",
             connectStmtAst: connectStmtAst,
             setProjectBaseDirStmtAst: setProjectBaseDirStmtAst,
+            setProjectNameStmtAst: setProjectNameStmtAst,
             createSchemaStmtAst: createSchemaStmtAst
         }
     }
@@ -56,6 +67,13 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         }
     }
 
+    setProjectNameStmt(ctx){
+        let projectName = ctx.StringLiteral[0].image;
+        return {
+            type: ProjectNameStmtAstType,
+            name: JSON.parse(projectName)
+        }
+    }
 
     connectStatement(ctx) {
         let MongoURI = ctx.MongoURI[0].image;
