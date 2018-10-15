@@ -36,6 +36,18 @@ describe("Lexing tests", () => {
             // expect(tokens[0].image).to.equal("")
         });
 
+        it("Can Lex a Project Name", () => {
+            let projectNameSample = "SetProjectName(\"testProjectName\");";
+            let lexingResult = lex(projectNameSample);
+            console.log(JSON.stringify(lexingResult.errors));
+
+            let tokens = lexingResult.tokens;
+
+            expect(lexingResult.errors).to.be.empty;
+            expect(tokenMatcher(tokens[0], tokenVocabulary.SetProjectName)).to.be.true;
+            expect(tokenMatcher(tokens[2], tokenVocabulary.StringLiteral)).to.be.true;
+        });
+
         it("Can Lex a DB URL", () => {
             let dbUrl = "ds111963.mlab.com:11963/emaily-dev";
             let lexingResult = lex(dbUrl);
