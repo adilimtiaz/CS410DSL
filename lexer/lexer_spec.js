@@ -48,7 +48,8 @@ describe("Lexing tests", () => {
         });
 
         it("Can Lex a Unix Path", () => {
-            let unixPath = "\"" + path.join(__dirname, "../SampleGeneratedProject") + "\""; //When reading a string from the file it gets double quotes around it
+            let unixPath = "\"/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial\""; //When reading a string from the file it gets double quotes around it
+            console.log("HELLO ITS ME AND THIS IS THE UNIX PATH" + unixPath);
             let lexingResult = lex(unixPath);
             console.log(JSON.stringify(lexingResult.errors));
 

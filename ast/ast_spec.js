@@ -18,7 +18,7 @@ describe("AST output tests", () => {
             "fields": [
                 {
                     "fieldName": "ID",
-                    "fieldType": "Integer"
+                    "fieldType": "Number"
                 },
                 {
                     "fieldName": "StudentName",
@@ -32,7 +32,7 @@ describe("AST output tests", () => {
             "fields": [
                 {
                     "fieldName": "ID",
-                    "fieldType": "Integer"
+                    "fieldType": "Number"
                 },
                 {
                     "fieldName": "ProjectName",
@@ -46,7 +46,7 @@ describe("AST output tests", () => {
             "fields": [
                 {
                     "fieldName": "Number",
-                    "fieldType": "Integer"
+                    "fieldType": "Number"
                 },
                 {
                     "fieldName": "ProjectName",
