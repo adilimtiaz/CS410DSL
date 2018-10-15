@@ -63,7 +63,7 @@ class DSLToAstVisitor extends BaseDSLVisitor {
 
         return {
             type: "SET_PROJECT_BASE_DIR_STMT",
-            path: JSON.parse(path)
+            path: path.slice(1, -1)
         }
     }
 
