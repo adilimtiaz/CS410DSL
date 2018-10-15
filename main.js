@@ -15,13 +15,24 @@ let projectBaseDir = setProjectBaseDirStmtAst.path;
 let projectName = programAst.setProjectNameStmtAst.name;
 
 let mongoURI = generators.createMongoURI(connectStmtAst.mongoURI, connectStmtAst.dbUsername, connectStmtAst.dbPassword);
-generators.generateSampleIndexFile(mongoURI, projectBaseDir, projectName);
-generators.generatePackageJSONAndReadme(projectBaseDir, projectName);
-
 let schemasToCreate = createSchemaStatementAst.schemas;
+let schemaNames = [];
 schemasToCreate.forEach(schema => {
-    generators.generateModel(projectBaseDir, projectName, schema.schemaName, schema.fields);
+    schemaNames.push(schema.schemaName);
 });
 
+generators.generateSampleIndexFile(mongoURI, projectBaseDir,projectName,schemaNames);
+generators.generatePackageJSONAndReadme(projectBaseDir, projectName);
+
+schemasToCreate.forEach(schema => {
+
+    generators.generateModel(projectBaseDir, projectName, schema.schemaName, schema.fields);
+    generators.generateController(projectBaseDir, projectName, schema.schemaName);
+    generators.generateRoutes(projectBaseDir,projectName,schema.schemaName);
+
+});
+
+//TODO: Add Insert Statements
+// for each insert statement: insertIntoSchema
 
 console.log(JSON.stringify(programAst, null, "\t"));

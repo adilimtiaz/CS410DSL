@@ -55,15 +55,17 @@ class DSLToAstVisitor extends BaseDSLVisitor {
 
     setProjectBaseDirStmt(ctx){
         let path;
+        let toParse = true;
         if(ctx.UnixPath){
             path = ctx.UnixPath[0].image;
         }
-        else
+        else {
             path = ctx.WindowsPath[0].image;
-
+            toParse = false;
+        }
         return {
             type: "SET_PROJECT_BASE_DIR_STMT",
-            path: JSON.parse(path)
+            path: (toParse) ? JSON.parse(path) : path
         }
     }
 
