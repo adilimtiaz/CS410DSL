@@ -19,7 +19,7 @@ let projectBaseDir = setProjectBaseDirStmtAst.path;
 let projectName = "myProject";
 
 let mongoURI = generators.createMongoURI(connectStmtAst.mongoURI, connectStmtAst.dbUsername, connectStmtAst.dbPassword);
-//generators.generateSampleIndexFile(mongoURI, projectBaseDir);
+generators.generateSampleIndexFile(mongoURI, projectBaseDir);
 
 
 let schemasToCreate = createSchemaStatementAst.schemas;
