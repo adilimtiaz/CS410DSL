@@ -49,8 +49,8 @@ describe("AST output tests", () => {
                     "fieldType": "Number"
                 },
                 {
-                    "fieldName": "ProjectName",
-                    "fieldType": "String"
+                    "fieldName": "ProjectNames",
+                    "fieldType": "ArrayOfStrings"
                 }
              ],
             "schemaName": "CTable"
