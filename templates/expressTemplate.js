@@ -11,11 +11,17 @@ module.exports = (mongoURI, routeNames) => {
     return `
     const express = require('express');
     const mongoose = require('mongoose');
+    
+    const bodyParser = require('body-parser');
+    
 
     // Connect to MongoDB instance
     mongoose.connect("${mongoURI}");
 
     const app = express();
+    
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded());
 
     // Import Server Routes Here
     ${requireString}
