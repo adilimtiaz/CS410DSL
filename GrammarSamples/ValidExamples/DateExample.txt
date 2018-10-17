@@ -1,0 +1,23 @@
+start
+    Connect("ds111963.mlab.com:11963/emaily-dev", "adilimtiaz", "password123");
+    SetProjectBaseDir("/Users/raymondsushi/Desktop/CS410DSL");
+    CreateSchema(
+        SchemaName: "Matches",
+        Fields: {
+            "Sport": "String",
+            "Date": "Date",
+            "Winner": "String",
+            "Loser": "String",
+            "Attendance": "Number"
+        });
+    InsertIntoSchema(
+        SchemaName: "Matches",
+        Fields: {
+            "Sport": "Hockey",
+            "Date": "2000-04-14",
+            "Winner": "Vancouver",
+            "Loser": "Calgary",
+            "Attendance": "42454"
+        }
+    );
+end

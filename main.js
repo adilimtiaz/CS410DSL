@@ -6,6 +6,7 @@ const mongoHandler = require('./lib/mongoHandler');
 
 let inputText = fs.readFileSync(path.join(__dirname ,'./GrammarSamples/Sample.txt'), 'utf8');
 
+
 let programAst = toAstVisitor(inputText);
 
 let connectStmtAst = programAst.connectStmtAst;
