@@ -14,48 +14,61 @@ describe("AST output tests", () => {
             "type": "CONNECT_STMT"
         };
 
-        let expectedSchemaStmtJSON1 = {
+        let expectedCreateSchemaStmtJSON1 = {
             "fields": [
                 {
-                    "fieldName": "ID",
+                    "fieldName": "StudentNo",
                     "fieldType": "Number"
                 },
                 {
-                    "fieldName": "StudentName",
+                    "fieldName": "Email",
                     "fieldType": "String"
                 }
             ],
-            "schemaName": "ATable"
+            "schemaName": "SampleTestTable"
         };
 
-        let expectedSchemaStmtJSON2 = {
+        let expectedCreateSchemaStmtJSON2 = {
             "fields": [
                 {
-                    "fieldName": "ID",
+                    "fieldName": "StudentNo",
                     "fieldType": "Number"
                 },
                 {
-                    "fieldName": "ProjectName",
+                    "fieldName": "LetterGrade",
                     "fieldType": "String"
                 }
              ],
-            "schemaName": "BTable"
+            "schemaName": "SampleTestTable2"
         };
 
-        let expectedSchemaStmtJSON3 = {
+        let expectedCreateSchemaStmtJSON3 = {
             "fields": [
                 {
-                    "fieldName": "Number",
+                    "fieldName": "StudentNo",
                     "fieldType": "Number"
                 },
                 {
-                    "fieldName": "ProjectNames",
+                    "fieldName": "Courses",
                     "fieldType": "ArrayOfStrings"
                 }
              ],
-            "schemaName": "CTable"
+            "schemaName": "SampleTestTable3"
         };
 
+        let expectedInsertIntoSchemaStmtJSON = {
+            "fields": [
+                {
+                    "fieldName": "StudentNo",
+                    "fieldType": "3903"
+                },
+                {
+                    "fieldName": "Email",
+                    "fieldType": "email@email.com"
+                }
+            ],
+            "schemaName": "SampleTestTable"
+        };
 
         let expectSetProjectBaseDirStmtAst = {
             "path": "/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial",
@@ -68,16 +81,27 @@ describe("AST output tests", () => {
         };
 
         let expectSetProjectNameStmtAst = {
-            "name": "customProjectName",
+            "name": "myProject",
             "type": "SET_PROJECT_NAME_STMT"
         };
+
+        let expectedEmptyInsertSchemaStmtAst = {
+                "schemas": [],
+                "type": "INSERT_SCHEMA_STMT"
+        };
+
+        let expectedEmptyCreateSchemaStmtAst = {
+            "schemas": [],
+            "type": "CREATE_SCHEMA_STMT"
+        };
+
 
         it("Can create expected ast output from JustOneCreateSchemaStmt.txt", () => {
             let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/JustOneCreateSchemaStmt.txt'), 'utf8');
             const ast = toAstVisitor(inputText);
 
             let expectedSchemas = [];
-            expectedSchemas.push(expectedSchemaStmtJSON1);
+            expectedSchemas.push(expectedCreateSchemaStmtJSON1);
             let expectedCreateSchemaStmtAst = {schemas : expectedSchemas, type: "CREATE_SCHEMA_STMT"};
 
             expect(ast).to.deep.equal({
@@ -85,7 +109,8 @@ describe("AST output tests", () => {
                 connectStmtAst: expectedConnectStmtAst,
                 setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
                 setProjectNameStmtAst: expectDefaultProjectNameStmtAst,
-                createSchemaStmtAst: expectedCreateSchemaStmtAst
+                createSchemaStmtAst: expectedCreateSchemaStmtAst,
+                insertIntoSchemaStmtAst: expectedEmptyInsertSchemaStmtAst
             });
         });
 
@@ -94,7 +119,7 @@ describe("AST output tests", () => {
             const ast = toAstVisitor(inputText);
 
             let expectedSchemas = [];
-            expectedSchemas.push(expectedSchemaStmtJSON1);
+            expectedSchemas.push(expectedCreateSchemaStmtJSON1);
             let expectedCreateSchemaStmtAst = {schemas : expectedSchemas, type: "CREATE_SCHEMA_STMT"};
 
             expect(ast).to.deep.equal({
@@ -102,7 +127,8 @@ describe("AST output tests", () => {
                 connectStmtAst: expectedConnectStmtAst,
                 setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
                 setProjectNameStmtAst: expectSetProjectNameStmtAst,
-                createSchemaStmtAst: expectedCreateSchemaStmtAst
+                createSchemaStmtAst: expectedCreateSchemaStmtAst,
+                insertIntoSchemaStmtAst: expectedEmptyInsertSchemaStmtAst
             });
         });
 
@@ -111,7 +137,7 @@ describe("AST output tests", () => {
             const ast = toAstVisitor(inputText);
 
             let expectedSchemas = [];
-            expectedSchemas.push(expectedSchemaStmtJSON1, expectedSchemaStmtJSON2, expectedSchemaStmtJSON3);
+            expectedSchemas.push(expectedCreateSchemaStmtJSON1, expectedCreateSchemaStmtJSON2, expectedCreateSchemaStmtJSON3);
             let expectedCreateSchemaStmtAst = {schemas : expectedSchemas, type: "CREATE_SCHEMA_STMT"};
 
             expect(ast).to.deep.equal({
@@ -119,7 +145,26 @@ describe("AST output tests", () => {
                 connectStmtAst: expectedConnectStmtAst,
                 setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
                 setProjectNameStmtAst: expectDefaultProjectNameStmtAst,
-                createSchemaStmtAst: expectedCreateSchemaStmtAst
+                createSchemaStmtAst: expectedCreateSchemaStmtAst,
+                insertIntoSchemaStmtAst: expectedEmptyInsertSchemaStmtAst
+            });
+        });
+
+        it("Can create expected ast output for multiple insertIntoSchemaStatements", () => {
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/SampleWithOnlyInsertNoCreate.txt'), 'utf8');
+            const ast = toAstVisitor(inputText);
+
+            let expectedSchemas = [];
+            expectedSchemas.push(expectedInsertIntoSchemaStmtJSON);
+            let insertIntoSchemaStmtAst = {schemas : expectedSchemas, type: "INSERT_SCHEMA_STMT"};
+
+            expect(ast).to.deep.equal({
+                type: "PROGRAM",
+                connectStmtAst: expectedConnectStmtAst,
+                setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
+                setProjectNameStmtAst: expectDefaultProjectNameStmtAst,
+                createSchemaStmtAst: expectedEmptyCreateSchemaStmtAst,
+                insertIntoSchemaStmtAst: insertIntoSchemaStmtAst
             });
         })
 

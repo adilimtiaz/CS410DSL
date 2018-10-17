@@ -12,6 +12,11 @@ describe("Parser", () => {
             expect(() => parse(inputText)).to.not.throw();
         });
 
+        it("Can Parse an input with InsertIntoSchema", () => {
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/SampleWithInserts.txt'), 'utf8');
+            expect(() => parse(inputText)).to.not.throw();
+        });
+
         it("Will throw an error for an invalid input", () => {
             // missing table name
             let inputText = "SELECT FROM table2";
