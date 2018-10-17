@@ -1,6 +1,6 @@
 module.exports = (modelName) => {
 
-    return `const ${modelName} = require('../models/${modelName}Schema.js');
+    return `const ${modelName} = require('../models/${modelName}Schema.js').${modelName};
 
 /**
  * ${modelName}.js
