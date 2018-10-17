@@ -83,7 +83,7 @@ describe("Lexing tests", () => {
         });
 
         it("Can Lex a sample with InsertIntoSchema", () => {
-            const inputText = fs.readFileSync(path.join(__dirname, '../GrammarSamples/SampleWithInserts.txt'), 'utf8');
+            const inputText = fs.readFileSync(path.join(__dirname, '../GrammarSamples/SampleWithInvalidInserts.txt'), 'utf8');
             let lexingResult = lex(inputText);
             console.log(JSON.stringify(lexingResult.errors));
 

@@ -1,5 +1,0 @@
-start
-    Connect("ds111963.mlab.com:11963/emaily-dev", "adilimtiaz", "password123");
-    SetProjectBaseDir("/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial");
-    InsertIntoSchema(SchemaName:"SampleTestTable", Fields: {"StudentNo": "39030144", "Email": "llalalagmailcom"});
-end

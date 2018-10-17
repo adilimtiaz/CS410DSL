@@ -132,7 +132,7 @@ describe("AST output tests", () => {
             });
         });
 
-        it("Can create expected ast output for multiple createSchemaStatements", () => {
+        it("Can create expected ast output for multiple createSchemaStatements and a valid insertSchemaStatement", () => {
             let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/sample.txt'), 'utf8');
             const ast = toAstVisitor(inputText);
 
@@ -140,33 +140,29 @@ describe("AST output tests", () => {
             expectedSchemas.push(expectedCreateSchemaStmtJSON1, expectedCreateSchemaStmtJSON2, expectedCreateSchemaStmtJSON3);
             let expectedCreateSchemaStmtAst = {schemas : expectedSchemas, type: "CREATE_SCHEMA_STMT"};
 
+            let expectedSchemasToInsert = [];
+            expectedSchemasToInsert.push(expectedInsertIntoSchemaStmtJSON);
+            let expectedInsertSchemaStmtAst = {schemas: expectedSchemasToInsert, type: "INSERT_SCHEMA_STMT"};
+
             expect(ast).to.deep.equal({
                 type: "PROGRAM",
                 connectStmtAst: expectedConnectStmtAst,
                 setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
                 setProjectNameStmtAst: expectDefaultProjectNameStmtAst,
                 createSchemaStmtAst: expectedCreateSchemaStmtAst,
-                insertIntoSchemaStmtAst: expectedEmptyInsertSchemaStmtAst
+                insertIntoSchemaStmtAst: expectedInsertSchemaStmtAst
             });
         });
 
-        it("Can create expected ast output for multiple insertIntoSchemaStatements", () => {
+        it("Will throw an error if insert statement found without create statement", () => {
             let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/SampleWithOnlyInsertNoCreate.txt'), 'utf8');
-            const ast = toAstVisitor(inputText);
+            expect(() => toAstVisitor(inputText)).to.throw();
+        });
 
-            let expectedSchemas = [];
-            expectedSchemas.push(expectedInsertIntoSchemaStmtJSON);
-            let insertIntoSchemaStmtAst = {schemas : expectedSchemas, type: "INSERT_SCHEMA_STMT"};
-
-            expect(ast).to.deep.equal({
-                type: "PROGRAM",
-                connectStmtAst: expectedConnectStmtAst,
-                setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
-                setProjectNameStmtAst: expectDefaultProjectNameStmtAst,
-                createSchemaStmtAst: expectedEmptyCreateSchemaStmtAst,
-                insertIntoSchemaStmtAst: insertIntoSchemaStmtAst
-            });
-        })
+        it("Will throw an error if insert statement adds Schema to Schema not found in schemasToInsert", ()=> {
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/SampleWithInvalidInserts.txt'), 'utf8');
+            expect(() => toAstVisitor(inputText)).to.throw();
+        });
 
     })
 });

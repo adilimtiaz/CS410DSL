@@ -4,4 +4,5 @@ start
     CreateSchema(SchemaName:"SampleTestTable", Fields: {"StudentNo":"Number", "Email":"String"});
     CreateSchema(SchemaName:"SampleTestTable2", Fields: {"StudentNo":"Number", "LetterGrade":"String"});
     CreateSchema(SchemaName:"SampleTestTable3", Fields: {"StudentNo":"Number", "Courses":"ArrayOfStrings"});
+    InsertIntoSchema(SchemaName:"SampleTestTable", Fields: {"StudentNo":"3903", "Email":"email@email.com"});
 end

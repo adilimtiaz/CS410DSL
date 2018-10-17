@@ -13,7 +13,7 @@ describe("Parser", () => {
         });
 
         it("Can Parse an input with InsertIntoSchema", () => {
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/SampleWithInserts.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/SampleWithInvalidInserts.txt'), 'utf8');
             expect(() => parse(inputText)).to.not.throw();
         });
 
