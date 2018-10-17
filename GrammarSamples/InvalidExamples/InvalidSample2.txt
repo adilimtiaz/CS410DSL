@@ -1,0 +1,47 @@
+start
+    Connect("ds111963.mlab.com:11963/emaily-dev", "adilimtiaz", "password123");
+    SetProjectBaseDir("/Users/raymondsushi/Desktop/CS410DSL");
+    CreateSchema(
+        SchemaName: "Courses",
+        Fields: {
+            "Faculty": "String",
+            "CourseNo": "Number",
+            "Title": "String",
+            "Enrollment": "Number",
+            "AverageGrade": "Number"
+        });
+    CreateSchema(
+        SchemaName: "Countries",
+        Fields: {
+            "Name": "String",
+            "Continent": "String",
+            "Population": "Number",
+            "Capital": "String"
+        });
+    CreateSchema(
+        SchemaName: "Games",
+        Fields: {
+            "Name": "String",
+            "HasBoard": "Boolean",
+            "HasCards": "Boolean",
+            "Price": "Number"
+        });
+    InsertIntoSchema(
+        SchemaName: "Courses",
+        Fields: {
+            "CourseNo": "410", "Title": "AdvancedSoftwareEngineering", "Enrollment": "114", "AverageGrade": "83"
+        }
+    );
+    InsertIntoSchema(
+        SchemaName: "Countries",
+        Fields: {
+            "Name": "Canada", "Continent": "NorthAmerica", "Population": "36000000", "Capital": "Ottawa"
+        }
+    );
+    InsertIntoSchema(
+        SchemaName: "Games",
+        Fields: {
+            "Name": "Chess", "HasBoard": "True", "HasCards": "False", "Price": "8.99"
+        }
+    );
+end

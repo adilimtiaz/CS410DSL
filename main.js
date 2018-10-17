@@ -4,7 +4,7 @@ const path = require("path");
 const generators = require("./lib/generators");
 const mongoHandler = require('./lib/mongoHandler');
 
-let inputText = fs.readFileSync(path.join(__dirname ,'./GrammarSamples/NoEnd.txt'), 'utf8');
+let inputText = fs.readFileSync(path.join(__dirname ,'./GrammarSamples/InvalidExamples/InvalidSample3.txt'), 'utf8');
 
 let programAst = toAstVisitor(inputText);
 
