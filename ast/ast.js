@@ -10,7 +10,7 @@ const lexer = require("../lexer/lexer");
 // re-using the parser implemented in step two.
 const parser = require("../parser/parser");
 const Parser = parser.Parser;
-const util = require("util");
+const _ = require("lodash");
 
 // A new parser instance with CST output (enabled by default).
 const parserInstance = new Parser([]);
@@ -47,11 +47,21 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         let createSchemaStmtAst = {type: "CREATE_SCHEMA_STMT", schemas: schemas};
 
         let schemasToInsert =[];
-        if(ctx.insertIntoSchemaStatement){
+        if(ctx.createSchemaStatement && ctx.insertIntoSchemaStatement){
             ctx.insertIntoSchemaStatement.forEach((statement) => {
                 let schemaToInsert = this.insertIntoSchemaStatement(statement.children);
-                schemasToInsert.push(schemaToInsert);
+                try{
+                    if(!_.find(schemas, {schemaName: schemaToInsert.schemaName})){
+                        throw new Error("You cannot insert data into schemaName: " + schemaToInsert.schemaName + " as it has not been created yet");
+                    }
+                    schemasToInsert.push(schemaToInsert);
+                } catch(e){
+                    throw new Error(e.message);
+                }
             });
+        }
+        if(ctx.insertIntoSchemaStatement && !ctx.createSchemaStatement){
+            throw new Error ("insertSchemaStatement cannot be used without createSchemaStatement");
         }
         let InsertIntoSchemaStmtAst = {type: "INSERT_SCHEMA_STMT", schemas: schemasToInsert};
 
