@@ -13,6 +13,9 @@ endStmt
 setProjectBaseDir
     : setProjectBaseDir("Path");
 
+setProjectName
+    : setProjectName("Name");
+
 statement
     : createSchemaStmt | insertSchemastmt
 

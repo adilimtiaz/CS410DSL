@@ -18,7 +18,7 @@ describe("AST output tests", () => {
             "fields": [
                 {
                     "fieldName": "ID",
-                    "fieldType": "Integer"
+                    "fieldType": "Number"
                 },
                 {
                     "fieldName": "StudentName",
@@ -32,7 +32,7 @@ describe("AST output tests", () => {
             "fields": [
                 {
                     "fieldName": "ID",
-                    "fieldType": "Integer"
+                    "fieldType": "Number"
                 },
                 {
                     "fieldName": "ProjectName",
@@ -46,11 +46,11 @@ describe("AST output tests", () => {
             "fields": [
                 {
                     "fieldName": "Number",
-                    "fieldType": "Integer"
+                    "fieldType": "Number"
                 },
                 {
-                    "fieldName": "ProjectName",
-                    "fieldType": "String"
+                    "fieldName": "ProjectNames",
+                    "fieldType": "ArrayOfStrings"
                 }
              ],
             "schemaName": "CTable"
@@ -60,6 +60,16 @@ describe("AST output tests", () => {
         let expectSetProjectBaseDirStmtAst = {
             "path": "/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial",
             "type": "SET_PROJECT_BASE_DIR_STMT"
+        };
+
+        let expectDefaultProjectNameStmtAst = {
+            "name": "myProject",
+            "type": "SET_PROJECT_NAME_STMT"
+        };
+
+        let expectSetProjectNameStmtAst = {
+            "name": "customProjectName",
+            "type": "SET_PROJECT_NAME_STMT"
         };
 
         it("Can create expected ast output from JustOneCreateSchemaStmt.txt", () => {
@@ -74,6 +84,24 @@ describe("AST output tests", () => {
                 type: "PROGRAM",
                 connectStmtAst: expectedConnectStmtAst,
                 setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
+                setProjectNameStmtAst: expectDefaultProjectNameStmtAst,
+                createSchemaStmtAst: expectedCreateSchemaStmtAst
+            });
+        });
+
+        it("Can create expected ast output for custom Project Name", () => {
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/CustomProjectName.txt'), 'utf8');
+            const ast = toAstVisitor(inputText);
+
+            let expectedSchemas = [];
+            expectedSchemas.push(expectedSchemaStmtJSON1);
+            let expectedCreateSchemaStmtAst = {schemas : expectedSchemas, type: "CREATE_SCHEMA_STMT"};
+
+            expect(ast).to.deep.equal({
+                type: "PROGRAM",
+                connectStmtAst: expectedConnectStmtAst,
+                setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
+                setProjectNameStmtAst: expectSetProjectNameStmtAst,
                 createSchemaStmtAst: expectedCreateSchemaStmtAst
             });
         });
@@ -90,6 +118,7 @@ describe("AST output tests", () => {
                 type: "PROGRAM",
                 connectStmtAst: expectedConnectStmtAst,
                 setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
+                setProjectNameStmtAst: expectDefaultProjectNameStmtAst,
                 createSchemaStmtAst: expectedCreateSchemaStmtAst
             });
         })

@@ -8,6 +8,9 @@ mongoose.connect({mongoURI});
 
 const app = express();
 
+app.get('/', (req, res) => {
+   res.send("This is the best sample base project ever");
+});
 
 //require('./routes/authRoutes')(app);
 

@@ -20,6 +20,8 @@ class Parser extends chevrotainParser {
            $.SUBRULE($.connectStatement);
            $.SUBRULE($.setProjectBaseDirStmt);
            $.MANY(() => {$.SUBRULE($.statement);});
+           $.OPTION(() => {$.SUBRULE($.setProjectNameStmt); });
+           $.MANY(() => { $.SUBRULE($.createSchemaStatement); });
            $.SUBRULE($.endStmt);
         });
 
@@ -34,6 +36,14 @@ class Parser extends chevrotainParser {
                 {ALT: () => $.CONSUME($.tokensMap.UnixPath)},
                 {ALT: () => $.CONSUME($.tokensMap.WindowsPath)}
             ], {LABEL: "path"});
+            $.CONSUME($.tokensMap.RRound);
+            $.CONSUME($.tokensMap.Semicolon);
+        });
+
+        $.RULE("setProjectNameStmt", () =>{
+            $.CONSUME($.tokensMap.SetProjectName);
+            $.CONSUME($.tokensMap.LRound);
+            $.CONSUME1($.tokensMap.StringLiteral);
             $.CONSUME($.tokensMap.RRound);
             $.CONSUME($.tokensMap.Semicolon);
         });

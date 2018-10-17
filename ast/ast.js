@@ -17,6 +17,9 @@ const parserInstance = new Parser([]);
 // The base visitor class can be accessed via the a parser instance.
 const BaseDSLVisitor = parserInstance.getBaseCstVisitorConstructorWithDefaults();
 
+const ProjectNameStmtAstType =  "SET_PROJECT_NAME_STMT";
+const DefaultProjectNameAst = {type: ProjectNameStmtAstType, name: "myProject"};
+
 class DSLToAstVisitor extends BaseDSLVisitor {
     constructor() {
         super();
@@ -31,6 +34,7 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         ctx.statement.forEach((stmt) => {
             const stmtContent = this.statement(stmt.children);
             statements.push(stmtContent);
+
         });
         let statementAst = {type: "STATEMENT", statements: statements};
 
@@ -68,15 +72,25 @@ class DSLToAstVisitor extends BaseDSLVisitor {
 
     setProjectBaseDirStmt(ctx){
         let path;
+        let toParse = true;
         if(ctx.UnixPath){
             path = ctx.UnixPath[0].image;
         }
-        else
+        else {
             path = ctx.WindowsPath[0].image;
-
+            toParse = false;
+        }
         return {
             type: "SET_PROJECT_BASE_DIR_STMT",
-            path: JSON.parse(path)
+            path: (toParse) ? JSON.parse(path) : path
+        }
+    }
+
+    setProjectNameStmt(ctx){
+        let projectName = ctx.StringLiteral[0].image;
+        return {
+            type: ProjectNameStmtAstType,
+            name: JSON.parse(projectName)
         }
     }
 

@@ -36,6 +36,18 @@ describe("Lexing tests", () => {
             // expect(tokens[0].image).to.equal("")
         });
 
+        it("Can Lex a Project Name", () => {
+            let projectNameSample = "SetProjectName(\"testProjectName\");";
+            let lexingResult = lex(projectNameSample);
+            console.log(JSON.stringify(lexingResult.errors));
+
+            let tokens = lexingResult.tokens;
+
+            expect(lexingResult.errors).to.be.empty;
+            expect(tokenMatcher(tokens[0], tokenVocabulary.SetProjectName)).to.be.true;
+            expect(tokenMatcher(tokens[2], tokenVocabulary.StringLiteral)).to.be.true;
+        });
+
         it("Can Lex a DB URL", () => {
             let dbUrl = "ds111963.mlab.com:11963/emaily-dev";
             let lexingResult = lex(dbUrl);
@@ -48,7 +60,8 @@ describe("Lexing tests", () => {
         });
 
         it("Can Lex a Unix Path", () => {
-            let unixPath = "\"" + path.join(__dirname, "../SampleGeneratedProject") + "\""; //When reading a string from the file it gets double quotes around it
+            let unixPath = "\"/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial\""; //When reading a string from the file it gets double quotes around it
+            console.log("HELLO ITS ME AND THIS IS THE UNIX PATH" + unixPath);
             let lexingResult = lex(unixPath);
             console.log(JSON.stringify(lexingResult.errors));
 

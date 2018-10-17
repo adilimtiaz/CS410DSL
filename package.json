@@ -8,6 +8,8 @@
     "dependencies": {
         "chevrotain": "*",
         "fs": "0.0.1-security",
+        "mongoose": "^5.3.3",
+        "os": "^0.1.1",
         "path": "^0.12.7"
     },
     "devDependencies": {
