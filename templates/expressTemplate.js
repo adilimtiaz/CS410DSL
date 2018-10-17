@@ -8,28 +8,25 @@ module.exports = (mongoURI, routeNames) => {
         requireString += `app.use('/',require('./routes/${routeNames[i]}.js'));\n\t`;
     }
 
-    return `
-    const express = require('express');
-    const mongoose = require('mongoose');
-    
-    const bodyParser = require('body-parser');
-    
+    return `const express = require('express');
+const mongoose = require('mongoose');
 
-    // Connect to MongoDB instance
-    mongoose.connect("${mongoURI}");
-
-    const app = express();
+const bodyParser = require('body-parser');
     
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded());
+// Connect to MongoDB instance
+mongoose.connect("${mongoURI}");
 
-    // Import Server Routes Here
-    ${requireString}
+const app = express();
     
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT,() => {
-        console.log("Server listening on port: " + PORT);
-    });
-    `;
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+
+// Import Server Routes Here
+${requireString}
+    
+const PORT = process.env.PORT || 5000;
+app.listen(PORT,() => {
+    console.log("Server listening on port: " + PORT);
+});`;
 };
 

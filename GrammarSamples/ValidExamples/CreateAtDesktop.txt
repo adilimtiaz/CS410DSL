@@ -1,0 +1,6 @@
+start
+    Connect("ds111963.mlab.com:11963/emaily-dev", "adilimtiaz", "password123");
+    SetProjectBaseDir("/Users/adilimtiaz/Desktop");
+    SetProjectName("MyDSL");
+    CreateSchema(SchemaName:"SampleTestTable", Fields: {"StudentNo":"Number", "Email":"String"});
+end

@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const generators = require("./lib/generators");
 
-let inputText = fs.readFileSync(path.join(__dirname ,'./GrammarSamples/ValidExamples/CustomProjectName.txt'), 'utf8');
+let inputText = fs.readFileSync(path.join(__dirname ,'./GrammarSamples/ValidExamples/DateExample.txt'), 'utf8');
 
 
 let programAst = toAstVisitor(inputText);
@@ -46,6 +46,7 @@ Promise.all(waitForInsertions).then(() => {
         console.log("All insertions are complete");
     }
     console.log("Program execution complete");
+    process.exit(0);
 });
 
 

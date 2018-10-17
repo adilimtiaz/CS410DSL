@@ -172,7 +172,7 @@ module.exports = {
             throw Error(
                 "Sad sad panda, parsing errors detected!\n" +
                     parserInstance.errors[0].message + "\n"
-                    + "After token : " +  parserInstance.errors[0].previousToken.image + " at line " +  parserInstance.errors[0].previousToken.endLine
+                    + "After token " +  parserInstance.errors[0].previousToken.image + " at line " +  parserInstance.errors[0].previousToken.endLine
             )
         }
 
