@@ -10,7 +10,7 @@ const path = require("path");
 describe("Lexing tests", () => {
     context("Lexing", () => {
         it("Can Lex a simple sample with one create Schema statment", () => {
-            const inputText = fs.readFileSync(path.join(__dirname, '../GrammarSamples/JustOneCreateSchemaStmt.txt'), 'utf8');
+            const inputText = fs.readFileSync(path.join(__dirname, '../GrammarSamples/ValidExamples/JustOneCreateSchemaStmt.txt'), 'utf8');
             let lexingResult = lex(inputText);
 
             console.log(JSON.stringify(lexingResult.errors));
@@ -83,11 +83,9 @@ describe("Lexing tests", () => {
         });
 
         it("Can Lex a sample with InsertIntoSchema", () => {
-            const inputText = fs.readFileSync(path.join(__dirname, '../GrammarSamples/SampleWithInvalidInserts.txt'), 'utf8');
+            const inputText = fs.readFileSync(path.join(__dirname, '../GrammarSamples/InvalidExamples/SampleWithInvalidInserts.txt'), 'utf8');
             let lexingResult = lex(inputText);
             console.log(JSON.stringify(lexingResult.errors));
-
-            let tokens = lexingResult.tokens;
 
             expect(lexingResult.errors).to.be.empty;
         });

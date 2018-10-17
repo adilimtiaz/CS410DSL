@@ -1,8 +1,0 @@
-start
-    Connect("ds111963.mlab.com:11963/emaily-dev", "adilimtiaz", "password123");
-    SetProjectBaseDir("/Users/raymondsushi/Desktop/CS410DSL");
-    CreateSchema(SchemaName:"SampleTestTable", Fields: {"StudentNo":"Number", "Email":"String"});
-    CreateSchema(SchemaName:"SampleTestTable2", Fields: {"StudentNo":"Number", "LetterGrade":"String"});
-    CreateSchema(SchemaName:"SampleTestTable3", Fields: {"StudentNo":"Number", "Courses":"ArrayOfStrings"});
-    InsertIntoSchema(SchemaName:"SampleTestTable", Fields: {"StudentNo":"3903", "Email":"email@email.com"});
-end

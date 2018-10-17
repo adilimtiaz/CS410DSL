@@ -97,7 +97,7 @@ describe("AST output tests", () => {
 
 
         it("Can create expected ast output from JustOneCreateSchemaStmt.txt", () => {
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/JustOneCreateSchemaStmt.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/ValidExamples/JustOneCreateSchemaStmt.txt'), 'utf8');
             const ast = toAstVisitor(inputText);
 
             let expectedSchemas = [];
@@ -115,7 +115,7 @@ describe("AST output tests", () => {
         });
 
         it("Can create expected ast output for custom Project Name", () => {
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/CustomProjectName.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/ValidExamples/CustomProjectName.txt'), 'utf8');
             const ast = toAstVisitor(inputText);
 
             let expectedSchemas = [];
@@ -126,14 +126,14 @@ describe("AST output tests", () => {
                 type: "PROGRAM",
                 connectStmtAst: expectedConnectStmtAst,
                 setProjectBaseDirStmtAst: expectSetProjectBaseDirStmtAst,
-                setProjectNameStmtAst: expectSetProjectNameStmtAst,
+                setProjectNameStmtAst: {name: "Student", type: "SET_PROJECT_NAME_STMT"},
                 createSchemaStmtAst: expectedCreateSchemaStmtAst,
                 insertIntoSchemaStmtAst: expectedEmptyInsertSchemaStmtAst
             });
         });
 
         it("Can create expected ast output for multiple createSchemaStatements and a valid insertSchemaStatement", () => {
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/sample.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/ValidExamples/sample.txt'), 'utf8');
             const ast = toAstVisitor(inputText);
 
             let expectedSchemas = [];
@@ -155,12 +155,12 @@ describe("AST output tests", () => {
         });
 
         it("Will throw an error if insert statement found without create statement", () => {
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/SampleWithOnlyInsertNoCreate.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/InvalidExamples/SampleWithOnlyInsertNoCreate.txt'), 'utf8');
             expect(() => toAstVisitor(inputText)).to.throw();
         });
 
         it("Will throw an error if insert statement adds Schema to Schema not found in schemasToInsert", ()=> {
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/SampleWithInvalidInserts.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/InvalidExamples/SampleWithInvalidInserts.txt'), 'utf8');
             expect(() => toAstVisitor(inputText)).to.throw();
         });
 

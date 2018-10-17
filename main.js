@@ -2,9 +2,8 @@ const toAstVisitor = require("./ast/ast").toAst;
 const fs = require("fs");
 const path = require("path");
 const generators = require("./lib/generators");
-const mongoHandler = require('./lib/mongoHandler');
 
-let inputText = fs.readFileSync(path.join(__dirname ,'./GrammarSamples/ValidExamples/Sample.txt'), 'utf8');
+let inputText = fs.readFileSync(path.join(__dirname ,'./GrammarSamples/ValidExamples/CustomProjectName.txt'), 'utf8');
 
 
 let programAst = toAstVisitor(inputText);
@@ -34,9 +33,19 @@ schemasToCreate.forEach(schema => {
 });
 
 let schemasToInsert = insertIntoSchemaStatementAst.schemas;
+let waitForInsertions = [];
 schemasToInsert.forEach(schema =>{
-    generators.insertIntoSchema(projectBaseDir, projectName, schema.schemaName, schema.fields, mongoURI);
+    let waitForInsert = generators.insertIntoSchema(projectBaseDir, projectName, schema.schemaName, schema.fields, mongoURI);
+    waitForInsertions.push(waitForInsert);
 });
 
 
-console.log(JSON.stringify(programAst, null, "\t"));
+Promise.all(waitForInsertions).then(() => {
+    console.log(JSON.stringify(programAst, null, "\t"));
+    if(waitForInsertions.length>0){
+        console.log("All insertions are complete");
+    }
+    console.log("Program execution complete");
+});
+
+

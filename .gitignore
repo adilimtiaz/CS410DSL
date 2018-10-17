@@ -2,6 +2,7 @@
 .idea/
 /SampleBaseProject
 /MyProject
+/Student
 
 /typescript/*.js
 /coffeescript/*.js

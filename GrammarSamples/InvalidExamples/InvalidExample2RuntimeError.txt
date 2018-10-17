@@ -1,6 +1,6 @@
 start
     Connect("ds111963.mlab.com:11963/emaily-dev", "adilimtiaz", "password123");
-    SetProjectBaseDir("/Users/raymondsushi/Desktop/CS410DSL");
+    SetProjectBaseDir("/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial");
     CreateSchema(
         SchemaName: "Courses",
         Fields: {
@@ -29,7 +29,7 @@ start
     InsertIntoSchema(
         SchemaName: "Courses",
         Fields: {
-            "CourseNo": "410", "Title": "AdvancedSoftwareEngineering", "Enrollment": "114", "AverageGrade": "83"
+            "Faculty": "CPSC", "CourseNo": "410", "Title": "AdvancedSoftwareEngineering", "Enrollment": "114", "AverageGrade": "83"
         }
     );
     InsertIntoSchema(
@@ -41,7 +41,7 @@ start
     InsertIntoSchema(
         SchemaName: "Games",
         Fields: {
-            "Name": "Chess", "HasBoard": "True", "HasCards": "False", "Price": "8.99"
+            "Name": "Chess", "HasBoard": "true", "HasCards": "false", "Price": "8.99"
         }
     );
 end

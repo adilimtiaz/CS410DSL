@@ -111,7 +111,8 @@ module.exports = {
 
         if (lexingResult.errors.length > 0) {
             //console.log(JSON.stringify(lexingResult.errors));
-            let lexError = lexingResult.errors.map(error => error.message) + " Check line " + lexingResult.errors.map(error => error.line) + ", column " + lexingResult.errors.map(error => error.line) + ".";
+            let lexError = lexingResult.errors[0].message + "\n"+
+             " at line: " +  lexingResult.errors[0].line;
             throw Error(lexError);
         }
 

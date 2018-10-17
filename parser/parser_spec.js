@@ -8,12 +8,12 @@ const path = require("path");
 describe("Parser", () => {
     context("Parser tests", () => {
         it("Can Parse a simple input", () => {
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/Sample.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/ValidExamples/Sample.txt'), 'utf8');
             expect(() => parse(inputText)).to.not.throw();
         });
 
         it("Can Parse an input with InsertIntoSchema", () => {
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/SampleWithInvalidInserts.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/InvalidExamples/SampleWithInvalidInserts.txt'), 'utf8');
             expect(() => parse(inputText)).to.not.throw();
         });
 
@@ -25,7 +25,7 @@ describe("Parser", () => {
 
         it("Will throw an error for a program without a start and end", () => {
             // missing table name
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/NoStartEnd.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/InvalidExamples/NoStartEnd.txt'), 'utf8');
             expect(() => parse(inputText)).to.throw(
                 "Expecting token of type --> Start <-- but found --> 'Connect' <--"
             );
@@ -33,7 +33,7 @@ describe("Parser", () => {
 
         it("Will throw an error for a program without an end", () => {
             // missing table name
-            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/NoEnd.txt'), 'utf8');
+            let inputText = fs.readFileSync(path.join(__dirname ,'../GrammarSamples/InvalidExamples/NoEnd.txt'), 'utf8');
             expect(() => parse(inputText)).to.throw();
         })
     })
