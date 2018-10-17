@@ -21,6 +21,7 @@ class Parser extends chevrotainParser {
            $.SUBRULE($.setProjectBaseDirStmt);
            $.OPTION(() => {$.SUBRULE($.setProjectNameStmt); });
            $.MANY(() => { $.SUBRULE($.createSchemaStatement); });
+           $.MANY2(() => { $.SUBRULE($.insertIntoSchemaStatement); });
            $.SUBRULE($.endStmt);
         });
 
@@ -65,7 +66,7 @@ class Parser extends chevrotainParser {
 
         $.RULE("createSchemaStatement", () => {
             $.CONSUME($.tokensMap.CreateSchema);
-            $.CONSUME($.tokensMap.LCurly); //Start create Schema JSON
+            $.CONSUME($.tokensMap.LRound); //Start create Schema JSON
             $.SUBRULE($.nameClause);
             $.CONSUME($.tokensMap.Comma);
             $.CONSUME($.tokensMap.Fields);
@@ -76,7 +77,24 @@ class Parser extends chevrotainParser {
                 DEF: () => {$.SUBRULE($.fieldClause)}
             });
             $.CONSUME4($.tokensMap.RCurly); //End fields object
-            $.CONSUME5($.tokensMap.RCurly); //End create Schema JSON
+            $.CONSUME5($.tokensMap.RRound); //End create Schema JSON
+            $.CONSUME($.tokensMap.Semicolon);
+        });
+
+        $.RULE("insertIntoSchemaStatement", ()=>{
+            $.CONSUME($.tokensMap.Insert);
+            $.CONSUME($.tokensMap.LRound);
+            $.SUBRULE($.nameClause);
+            $.CONSUME($.tokensMap.Comma);
+            $.CONSUME($.tokensMap.Fields);
+            $.CONSUME1($.tokensMap.Colon1);
+            $.CONSUME3($.tokensMap.LCurly); //Start fields object
+            $.AT_LEAST_ONE_SEP({
+                SEP: $.tokensMap.Comma,
+                DEF: () => {$.SUBRULE($.fieldClause)}
+            });
+            $.CONSUME4($.tokensMap.RCurly); //End fields object
+            $.CONSUME5($.tokensMap.RRound); //End insert Schema JSON
             $.CONSUME($.tokensMap.Semicolon);
         });
 

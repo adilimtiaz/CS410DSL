@@ -8,7 +8,7 @@ const tokenVocabulary = {};
 
 const StringLiteral = createToken({
     name: "StringLiteral",
-    pattern: /"[^\/][a-zA-Z0-9_\-:/\.]*"/
+    pattern: /\"[^\/][a-zA-Z0-9_\-:/\.@]*\"/
 });
 const Start = createToken({name: "Start", pattern: /start/ , longer_alt: StringLiteral});
 const MongoURI = createToken({
@@ -33,6 +33,7 @@ const WindowsPath = createToken({
 const SetProjectBaseDir = createToken({name: "SetProjectBaseDir", pattern: /SetProjectBaseDir/});
 const SetProjectName = createToken({name: "SetProjectName", pattern: /SetProjectName/});
 const End = createToken({name: "End", pattern: /end/ , longer_alt: StringLiteral});
+const Insert = createToken({name: "Insert", pattern: /InsertIntoSchema/});
 const ConnectLiteral = createToken({name: "ConnectLiteral", pattern: /Connect/ , longer_alt: StringLiteral});
 const CreateSchema = createToken({name: "CreateSchema", pattern: /CreateSchema/, longer_alt: StringLiteral});
 const SchemaName = createToken({name: "SchemaName", pattern: /SchemaName/, longer_alt: StringLiteral});
@@ -68,6 +69,7 @@ const allTokens = [
     End,
     SetProjectBaseDir,
     SetProjectName,
+    Insert,
     ConnectLiteral,
     EndOfLine,
     CreateSchema,

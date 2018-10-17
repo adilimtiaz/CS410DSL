@@ -33,6 +33,6 @@ schemasToCreate.forEach(schema => {
 });
 
 //TODO: Add Insert Statements
-// for each insert statement: insertIntoSchema
+// for each insert statement: InsertIntoSchema
 
 console.log(JSON.stringify(programAst, null, "\t"));

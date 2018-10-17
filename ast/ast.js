@@ -38,18 +38,30 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         }
 
         let schemas = [];
-        ctx.createSchemaStatement.forEach((statement) => {
-            const schema = this.createSchemaStatement(statement.children);
-            schemas.push(schema);
-        });
+        if(ctx.createSchemaStatement){
+            ctx.createSchemaStatement.forEach((statement) => {
+                let schema = this.createSchemaStatement(statement.children);
+                schemas.push(schema);
+            });
+        }
         let createSchemaStmtAst = {type: "CREATE_SCHEMA_STMT", schemas: schemas};
+
+        let schemasToInsert =[];
+        if(ctx.insertIntoSchemaStatement){
+            ctx.insertIntoSchemaStatement.forEach((statement) => {
+                let schemaToInsert = this.insertIntoSchemaStatement(statement.children);
+                schemasToInsert.push(schemaToInsert);
+            });
+        }
+        let insertIntoSchemaStmtAst = {type: "INSERT_SCHEMA_STMT", schemas: schemasToInsert};
 
         return {
             type: "PROGRAM",
             connectStmtAst: connectStmtAst,
             setProjectBaseDirStmtAst: setProjectBaseDirStmtAst,
             setProjectNameStmtAst: setProjectNameStmtAst,
-            createSchemaStmtAst: createSchemaStmtAst
+            createSchemaStmtAst: createSchemaStmtAst,
+            insertIntoSchemaStmtAst: insertIntoSchemaStmtAst
         }
     }
 
@@ -91,6 +103,20 @@ class DSLToAstVisitor extends BaseDSLVisitor {
     }
 
     createSchemaStatement(ctx) {
+        let schemaName = JSON.parse(this.visit(ctx.nameClause));
+        let fields = [];
+        ctx.fieldClause.forEach((field) => {
+            let fieldAst = this.fieldClause(field.children);
+            fields.push(fieldAst);
+        });
+
+        return {
+            schemaName: schemaName,
+            fields: fields
+        }
+    }
+
+    insertIntoSchemaStatement(ctx) {
         let schemaName = JSON.parse(this.visit(ctx.nameClause));
         let fields = [];
         ctx.fieldClause.forEach((field) => {

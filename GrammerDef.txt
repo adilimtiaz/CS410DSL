@@ -21,3 +21,6 @@ statement
 
 createSchemaStmt:
     : createSchema(SchemaName: "StringLiteral" , fields: {(fieldName: fieldType)+,});
+
+insertSchemaStmt
+    : InsertIntoSchema(SchemaName: "StringLiteral", fields:(fieldName: fieldType)+,});

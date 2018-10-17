@@ -1,8 +1,7 @@
-
-
 start
     Connect("ds111963.mlab.com:11963/emaily-dev", "adilimtiaz", "password123");
     SetProjectBaseDir("/Users/adilimtiaz/WebstormProjects/chevrotain/examples/tutorial");
-    SetProjectName("yoyo");
-    CreateSchema{ SchemaName:"JasonTable", Fields:{"ID":"Number", "SchoolNames":"ArrayOfStrings"}};
+    CreateSchema(SchemaName:"SampleTestTable", Fields: {"StudentNo":"Number", "Email":"String"});
+    CreateSchema(SchemaName:"SampleTestTable2", Fields: {"StudentNo":"Number", "LetterGrade":"String"});
+    CreateSchema(SchemaName:"SampleTestTable3", Fields: {"StudentNo":"Number", "Courses":"ArrayOfStrings"});
 end
