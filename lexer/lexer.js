@@ -120,8 +120,8 @@ module.exports = {
         const lexingResult = Lexer.tokenize(inputText);
 
         if (lexingResult.errors.length > 0) {
-            console.log(JSON.stringify(lexingResult.errors));
-            throw Error(JSON.stringify(lexingResult.errors.map(error => error.message)));
+            //console.log(JSON.stringify(lexingResult.errors));
+            throw Error(lexingResult.errors.map(error => error.message) + " Check line " + lexingResult.errors.map(error => error.line) + ", column " + lexingResult.errors.map(error => error.line) + ".");
         }
 
         return lexingResult;
