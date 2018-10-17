@@ -30,43 +30,38 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         // No need to visit start or end ast they are only used to validate program syntax
         let connectStmtAst = this.visit(ctx.connectStatement);
         let setProjectBaseDirStmtAst = this.visit(ctx.setProjectBaseDirStmt);
-        let statements = [];
-        ctx.statement.forEach((stmt) => {
-            const stmtContent = this.statement(stmt.children);
-            statements.push(stmtContent);
+        let setProjectNameStmtAst;
+        if(ctx.setProjectNameStmt) {
+            setProjectNameStmtAst = this.visit(ctx.setProjectNameStmt);
+        } else {
+            setProjectNameStmtAst = DefaultProjectNameAst;
+        }
 
-        });
-        let statementAst = {type: "STATEMENT", statements: statements};
+        let schemas = [];
+        if(ctx.createSchemaStatement){
+            ctx.createSchemaStatement.forEach((statement) => {
+                let schema = this.createSchemaStatement(statement.children);
+                schemas.push(schema);
+            });
+        }
+        let createSchemaStmtAst = {type: "CREATE_SCHEMA_STMT", schemas: schemas};
+
+        let schemasToInsert =[];
+        if(ctx.insertIntoSchemaStatement){
+            ctx.insertIntoSchemaStatement.forEach((statement) => {
+                let schemaToInsert = this.insertIntoSchemaStatement(statement.children);
+                schemasToInsert.push(schemaToInsert);
+            });
+        }
+        let InsertIntoSchemaStmtAst = {type: "INSERT_SCHEMA_STMT", schemas: schemasToInsert};
 
         return {
             type: "PROGRAM",
             connectStmtAst: connectStmtAst,
             setProjectBaseDirStmtAst: setProjectBaseDirStmtAst,
-            statementAst: statementAst
-        }
-    }
-
-    statement(ctx){
-        let statementType = "";
-        let parameters = null;
-
-        if (ctx.hasOwnProperty("createSchemaStatement")) {
-            statementType = ctx.createSchemaStatement[0].name;
-            parameters = this.createSchemaStatement(ctx.createSchemaStatement[0].children);
-        } else if (ctx.hasOwnProperty("insertStatement")) {
-            statementType = ctx.insertStatement[0].name;
-            parameters = this.insertStatement(ctx.insertStatement[0].children);
-        } else if (ctx.hasOwnProperty("updateStatement")) {
-            statementType = ctx.updateStatement[0].name;
-            parameters = this.updateStatement(ctx.updateStatement[0].children);
-        } else if (ctx.hasOwnProperty("deleteStatement")) {
-            statementType = ctx.deleteStatement[0].name;
-            parameters = this.deleteStatement(ctx.deleteStatement[0].children);
-        }
-
-        return {
-            statementType: statementType,
-            parameters: parameters
+            setProjectNameStmtAst: setProjectNameStmtAst,
+            createSchemaStmtAst: createSchemaStmtAst,
+            insertIntoSchemaStmtAst: InsertIntoSchemaStmtAst
         }
     }
 
@@ -121,51 +116,17 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         }
     }
 
-    insertStatement(ctx) {
-        let tableName = JSON.parse(this.visit(ctx.tableNameClause));
-        let rows = [];
-        ctx.rowClause.forEach((row) => {
-            let rowAst = this.rowClause(row.children);
-            rows.push(rowAst);
+    insertIntoSchemaStatement(ctx) {
+        let schemaName = JSON.parse(this.visit(ctx.nameClause));
+        let fields = [];
+        ctx.fieldClause.forEach((field) => {
+            let fieldAst = this.fieldClause(field.children);
+            fields.push(fieldAst);
         });
 
         return {
-            tableName: tableName,
-            rows: rows
-        }
-    }
-
-    updateStatement(ctx) {
-        let tableName = JSON.parse(this.visit(ctx.tableNameClause));
-        let conditions = [];
-        ctx.conditionClause.forEach((condition) => {
-            let conditionsAst = this.valueClause(condition.children);
-            conditions.push(conditionsAst);
-        });
-        let values = [];
-        ctx.valueClause.forEach((value) => {
-            let valuesAst = this.valueClause(value.children);
-            values.push(valuesAst);
-        });
-
-        return {
-            tableName: tableName,
-            conditions: conditions,
-            values: values
-        }
-    }
-
-    deleteStatement(ctx) {
-        let tableName = JSON.parse(this.visit(ctx.tableNameClause));
-        let conditions = [];
-        ctx.conditionClause.forEach((condition) => {
-            let conditionsAst = this.valueClause(condition.children);
-            conditions.push(conditionsAst);
-        });
-
-        return {
-            tableName: tableName,
-            conditions: conditions
+            schemaName: schemaName,
+            fields: fields
         }
     }
 
@@ -174,38 +135,12 @@ class DSLToAstVisitor extends BaseDSLVisitor {
         return schemaName;
     }
 
-    tableNameClause(ctx) {
-        let tableName = ctx.StringLiteral[0].image;
-        return tableName;
-    }
-
     fieldClause(ctx) {
         let fieldName = ctx.StringLiteral[0].image;
         let fieldType = ctx.StringLiteral[1].image;
         return {
             fieldName: JSON.parse(fieldName),
             fieldType: JSON.parse(fieldType)
-        }
-    }
-
-    rowClause(ctx) {
-        let values = [];
-        ctx.valueClause.forEach((value) => {
-           let valueAst = this.valueClause(value.children);
-           values.push(valueAst);
-        });
-
-        return {
-            values: values
-        }
-    }
-
-    valueClause(ctx) {
-        let fieldName = ctx.StringLiteral[0].image;
-        let fieldValue = ctx.StringLiteral[1].image;
-        return {
-            fieldName: JSON.parse(fieldName),
-            fieldValue: JSON.parse(fieldValue)
         }
     }
 }
@@ -225,7 +160,7 @@ module.exports = {
 
         if (parserInstance.errors.length > 0) {
             throw Error(
-                "Oh no, parsing errors detected!\n" +
+                "Sad sad panda, parsing errors detected!\n" +
                     parserInstance.errors[0].message
             )
         }

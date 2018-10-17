@@ -81,5 +81,15 @@ describe("Lexing tests", () => {
             expect(lexingResult.errors).to.be.empty;
             expect(tokenMatcher(tokens[0], tokenVocabulary.WindowsPath)).to.be.true;
         });
+
+        it("Can Lex a sample with InsertIntoSchema", () => {
+            const inputText = fs.readFileSync(path.join(__dirname, '../GrammarSamples/SampleWithInserts.txt'), 'utf8');
+            let lexingResult = lex(inputText);
+            console.log(JSON.stringify(lexingResult.errors));
+
+            let tokens = lexingResult.tokens;
+
+            expect(lexingResult.errors).to.be.empty;
+        });
     });
 });
