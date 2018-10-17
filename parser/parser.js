@@ -21,7 +21,7 @@ class Parser extends chevrotainParser {
            $.SUBRULE($.setProjectBaseDirStmt);
            $.MANY(() => {$.SUBRULE($.statement);});
            $.OPTION(() => {$.SUBRULE($.setProjectNameStmt); });
-           $.MANY(() => { $.SUBRULE($.createSchemaStatement); });
+           $.MANY1(() => { $.SUBRULE($.createSchemaStatement); });
            $.SUBRULE($.endStmt);
         });
 
@@ -75,7 +75,7 @@ class Parser extends chevrotainParser {
 
         $.RULE("createSchemaStatement", () => {
             $.CONSUME($.tokensMap.CreateSchema);
-            $.CONSUME($.tokensMap.LCurly); //Start create Schema JSON
+            $.CONSUME($.tokensMap.LRound); //Start create Schema JSON
             $.SUBRULE($.nameClause);
             $.CONSUME($.tokensMap.Comma);
             $.CONSUME($.tokensMap.Fields);
@@ -86,7 +86,7 @@ class Parser extends chevrotainParser {
                 DEF: () => {$.SUBRULE($.fieldClause);}
             });
             $.CONSUME4($.tokensMap.RCurly); //End fields object
-            $.CONSUME5($.tokensMap.RCurly); //End create Schema JSON
+            $.CONSUME5($.tokensMap.RRound); //End create Schema JSON
             $.CONSUME($.tokensMap.Semicolon);
         });
 
