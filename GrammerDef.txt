@@ -1,5 +1,5 @@
 Program
-    : startStmt setProjectBaseDir connectStatement (statements)* endStmt
+    : startStmt setProjectBaseDir (setProjectName)? connectStatement (insertStatement)* endStmt
 
 startStmt
     : start
@@ -8,19 +8,19 @@ connectStatement
     : Connect("StringLiteral", "StringLiteral", "StringLiteral"); // url, username, password
 
 endStmt
-    : endStmt
+    : end
 
 setProjectBaseDir
-    : setProjectBaseDir("Path");
+    : SetProjectBaseDir("Path");
 
 setProjectName
-    : setProjectName("Name");
+    : SetProjectName("Name");
 
 statement
     : createSchemaStmt | insertSchemastmt
 
 createSchemaStmt:
-    : createSchema(SchemaName: "StringLiteral" , fields: {(fieldName: fieldType)+,});
+    : CreateSchema(SchemaName: "StringLiteral" , fields: {(fieldName: fieldType)+,});
 
 insertSchemaStmt
     : InsertIntoSchema(SchemaName: "StringLiteral", fields:(fieldName: fieldType)+,});
