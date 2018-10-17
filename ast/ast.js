@@ -53,7 +53,7 @@ class DSLToAstVisitor extends BaseDSLVisitor {
                 schemasToInsert.push(schemaToInsert);
             });
         }
-        let insertIntoSchemaStmtAst = {type: "INSERT_SCHEMA_STMT", schemas: schemasToInsert};
+        let InsertIntoSchemaStmtAst = {type: "INSERT_SCHEMA_STMT", schemas: schemasToInsert};
 
         return {
             type: "PROGRAM",
@@ -61,7 +61,7 @@ class DSLToAstVisitor extends BaseDSLVisitor {
             setProjectBaseDirStmtAst: setProjectBaseDirStmtAst,
             setProjectNameStmtAst: setProjectNameStmtAst,
             createSchemaStmtAst: createSchemaStmtAst,
-            insertIntoSchemaStmtAst: insertIntoSchemaStmtAst
+            insertIntoSchemaStmtAst: InsertIntoSchemaStmtAst
         }
     }
 
