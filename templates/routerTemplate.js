@@ -1,7 +1,6 @@
 module.exports = (controllerName) => {
 
-return `
-const express = require('express');
+return `const express = require('express');
 const router = express.Router();
 const ${controllerName} = require('../controllers/${controllerName}.js');
 
@@ -30,7 +29,5 @@ router.put('/${controllerName}/:id', ${controllerName}.update);
  */
 router.delete('/${controllerName}/:id', ${controllerName}.remove);
 
-module.exports = router;
-
-`
+module.exports = router;`
 };
