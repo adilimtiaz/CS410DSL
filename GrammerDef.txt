@@ -23,4 +23,4 @@ createSchemaStmt:
     : CreateSchema(SchemaName: "StringLiteral" , fields: {(fieldName: fieldType)+,});
 
 insertSchemaStmt
-    : InsertIntoSchema(SchemaName: "StringLiteral", fields:(fieldName: fieldType)+,});
+    : InsertIntoSchema(SchemaName: "StringLiteral", fields:{(fieldName: fieldType)+,});
