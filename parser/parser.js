@@ -19,9 +19,8 @@ class Parser extends chevrotainParser {
            $.SUBRULE($.startStmt);
            $.SUBRULE($.connectStatement);
            $.SUBRULE($.setProjectBaseDirStmt);
-           $.MANY(() => {$.SUBRULE($.statement);});
            $.OPTION(() => {$.SUBRULE($.setProjectNameStmt); });
-           $.MANY(() => { $.SUBRULE($.createSchemaStatement); });
+           $.MANY(() => {$.SUBRULE($.statement);});
            $.SUBRULE($.endStmt);
         });
 
